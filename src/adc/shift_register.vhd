@@ -12,10 +12,10 @@ end entity;
 architecture rtl of shift_register is
 	signal bits : ADC_RESOLUTION;
 begin
-  --------------------------------------------
-  -- Accepts a single bit input and shifts the
-  -- existing bits in the register to the left.
-  --------------------------------------------
+  ---------------------------------------------------------
+  -- Accepts a single bit input and shifts the existing
+  -- bits in the register to the left.
+  ---------------------------------------------------------
 	process (CLK, RESET)
 	begin
 		if RESET = '1' then
