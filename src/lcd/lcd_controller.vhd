@@ -21,13 +21,18 @@ begin
   -- the LCD display RAM.
   ---------------------------------------------------------
   -- TODO: What should CS1 and CS2 be? Constant?
-  process (current_state, ENABLE, DATA, RESET) is
+  process (current_time, current_state, ENABLE, DATA, RESET) is
   begin
     next_state <= current_state;
 
     case current_state is
       when LCD_STATE_START =>
         if current_time < LCD_RESET_TIME then
+          -- Initialize signals
+          LCD_RS <= '0';
+          LCD_RW <= '0';
+          LCD_ENABLE <= '0';
+          LCD_BUS <= (others => '0');
           LCD_RESET <= '1';
         else
           LCD_RESET <= '0';
