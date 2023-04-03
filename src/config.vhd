@@ -1,15 +1,22 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-package shared is
+package config is
+  ---------------------------------------------------------
+  -- General
+  ---------------------------------------------------------
+  -- System clock. For DE1-SoC, this will be 50 MHz.
+  constant CLK_FREQ : Time := 20 ns;
+
   ---------------------------------------------------------
   -- ADC (MCP3202)
   ---------------------------------------------------------
-  constant SPI_CLOCK_FREQ : Time := 1 us;
-
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
   subtype ADC_RESOLUTION is std_logic_vector (15 downto 0);
+
+  -- Clock frequency for the serial interface
+  constant SPI_CLOCK_FREQ : Time := CLK_FREQ;
 
   ---------------------------------------------------------
   -- LCD (ATM12864D)
@@ -33,6 +40,11 @@ package shared is
   -- in the datasheet.
   subtype LCD_DATA_BUFFER is std_logic_vector (9 downto 0);
 
+  -- Clock frequency of the LCD display controller.
+  -- This is used to ensure that we fulfill with the timing
+  -- constraints defined below.
+  constant LCD_CLK_FREQ : Time := (CLK_FREQ / 32); -- FIXME: clock divider
+
   -- Timing constraints of the LCD display.
   -- In order for the display to be able to fully execute
   -- the actions needed for a certain action, we need to wait
@@ -40,7 +52,4 @@ package shared is
   constant LCD_RESET_TIME : Time := 10 us; -- Min is 1 us
   constant LCD_INIT_TIME : Time := 50 us;
   constant LCD_ENABLE_CYCLE_TIME : Time := 500 ns;
-end package shared;
-
-package body shared is
-end shared;
+end package config;
