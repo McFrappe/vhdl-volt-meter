@@ -14,6 +14,15 @@ package shared is
   ---------------------------------------------------------
   -- LCD (ATM12864D)
   ---------------------------------------------------------
+  -- States for state machine used to initialize the LCD
+  -- display.
+  type LCD_STATE is (
+    LCD_STATE_START,
+    LCD_STATE_INIT,
+    LCD_STATE_READY,
+    LCD_STATE_SEND
+  );
+
   -- The bidirectional data bus used to read/write data
   -- to and from the LCD display.
   subtype LCD_DATA_BUS is std_logic_vector (7 downto 0);
@@ -23,6 +32,14 @@ package shared is
   -- buffer correspond to the RS and RW pins, exactly as shown
   -- in the datasheet.
   subtype LCD_DATA_BUFFER is std_logic_vector (9 downto 0);
+
+  -- Timing constraints of the LCD display.
+  -- In order for the display to be able to fully execute
+  -- the actions needed for a certain action, we need to wait
+  -- for a specific amount of time (according to the datasheet).
+  constant LCD_RESET_TIME : Time := 10 us; -- Min is 1 us
+  constant LCD_INIT_TIME : Time := 50 us;
+  constant LCD_ENABLE_CYCLE_TIME : Time := 500 ns;
 end package shared;
 
 package body shared is
