@@ -6,7 +6,7 @@ package config is
   -- General
   ---------------------------------------------------------
   -- System clock. For DE1-SoC, this will be 50 MHz.
-  constant CLK_FREQ : Time := 20 ns;
+  constant CLK_PERIOD : Time := 20 ns;
 
   ---------------------------------------------------------
   -- ADC (MCP3202)
@@ -15,8 +15,8 @@ package config is
   -- be stored in a 16-bit shift register.
   subtype ADC_RESOLUTION is std_logic_vector (15 downto 0);
 
-  -- Clock frequency for the serial interface
-  constant SPI_CLOCK_FREQ : Time := CLK_FREQ;
+  -- Clock period for the serial interface
+  constant SPI_CLOCK_PERIOD : Time := CLK_PERIOD;
 
   ---------------------------------------------------------
   -- LCD (ATM12864D)
@@ -43,7 +43,7 @@ package config is
   -- Clock frequency of the LCD display controller.
   -- This is used to ensure that we fulfill with the timing
   -- constraints defined below.
-  constant LCD_CLK_FREQ : Time := (CLK_FREQ / 32); -- FIXME: clock divider
+  constant LCD_CLK_PERIOD : Time := (CLK_PERIOD * 16); -- FIXME: clock divider
 
   -- Timing constraints of the LCD display.
   -- In order for the display to be able to fully execute

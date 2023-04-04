@@ -2,16 +2,14 @@ library ieee;
 use work.config.all;
 use ieee.std_logic_1164.all;
 
--- TODO: Add "busy" output that can be fed back into
--- the user logic in order to properly synchronize between
--- state changes.
 entity lcd_controller is
   port (
     CLK, RESET, ENABLE : in std_logic;
     DATA : in LCD_DATA_BUFFER;
     LCD_RS, LCD_RW, LCD_ENABLE : out std_logic;
     LCD_CS1, LCD_CS2, LCD_RESET : out std_logic;
-    LCD_BUS : out LCD_DATA_BUS
+    LCD_BUS : out LCD_DATA_BUS;
+    LCD_BUSY : out std_logic
   );
 end entity;
 
@@ -35,6 +33,7 @@ begin
           LCD_RS <= '0';
           LCD_RW <= '0';
           LCD_ENABLE <= '0';
+          LCD_BUSY <= '1';
           LCD_BUS <= (others => '0');
           LCD_RESET <= '1';
         else
@@ -53,6 +52,7 @@ begin
           next_state <= LCD_STATE_READY;
         end if;
       when LCD_STATE_READY =>
+        LCD_BUSY <= '0';
         if ENABLE = '1' then
           LCD_RS <= DATA(DATA'left);
           LCD_RW <= DATA(DATA'left - 1);
@@ -66,6 +66,7 @@ begin
       when LCD_STATE_SEND =>
         -- TODO: What timings is needed here? And do we really
         -- need to cycle between on and off?
+        LCD_BUSY <= '1';
         if current_time < LCD_ENABLE_CYCLE_TIME then
           LCD_ENABLE <= '0';
         elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
@@ -89,7 +90,7 @@ begin
       else
         -- Increase current_time for each clock cycle so that we
         -- can keep track of timings for reset, etc (based on datasheet).
-        current_time <= current_time + LCD_CLK_FREQ;
+        current_time <= current_time + LCD_CLK_PERIOD;
       end if;
       current_state <= next_state;
     end if;
