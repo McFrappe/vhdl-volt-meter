@@ -27,14 +27,21 @@ begin
     next_state <= current_state;
 
     case current_state is
-      when LCD_STATE_START =>
-        if current_time < LCD_RESET_TIME then
+      when LCD_STATE_POWER_UP =>
+        -- Wait for quite a while in order to make sure that
+        -- the LCD display has power, etc.
+        if current_time < LCD_POWER_UP_WAIT_TIME then
           -- Initialize signals
           LCD_RS <= '0';
           LCD_RW <= '0';
           LCD_ENABLE <= '0';
           LCD_BUSY <= '1';
           LCD_BUS <= (others => '0');
+        else
+          next_state <= LCD_STATE_START;
+        end if;
+      when LCD_STATE_START =>
+        if current_time < LCD_RESET_TIME then
           LCD_RESET <= '1';
         else
           LCD_RESET <= '0';
