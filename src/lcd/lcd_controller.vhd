@@ -2,6 +2,9 @@ library ieee;
 use work.config.all;
 use ieee.std_logic_1164.all;
 
+-- TODO: Add "busy" output that can be fed back into
+-- the user logic in order to properly synchronize between
+-- state changes.
 entity lcd_controller is
   port (
     CLK, RESET, ENABLE : in std_logic;
@@ -61,13 +64,15 @@ begin
           LCD_BUS <= DATA((DATA'left - 2) downto 0);
         end if;
       when LCD_STATE_SEND =>
+        -- TODO: What timings is needed here? And do we really
+        -- need to cycle between on and off?
         if current_time < LCD_ENABLE_CYCLE_TIME then
           LCD_ENABLE <= '0';
         elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
           LCD_ENABLE <= '1';
-        elsif current_time < (3 * LCD_ENABLE_CYCLE_TIME) then
-          LCD_ENABLE <= '0';
         elsif current_time < (5 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+        else
           next_state <= LCD_STATE_READY;
         end if;
     end case;

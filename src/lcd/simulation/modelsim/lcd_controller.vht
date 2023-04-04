@@ -77,9 +77,9 @@ BEGIN
   clock : PROCESS
   BEGIN
     CLK <= '1';
-    WAIT FOR CLK_FREQ / 2;
+    WAIT FOR LCD_CLK_FREQ / 2;
     CLK <= '0';
-    WAIT FOR CLK_FREQ / 2;
+    WAIT FOR LCD_CLK_FREQ / 2;
   END PROCESS clock;
 
   test : PROCESS
@@ -88,11 +88,20 @@ BEGIN
     DATA <= (others => '0');
 
     RESET <= '1';
-    WAIT FOR CLK_FREQ;
+    WAIT FOR LCD_CLK_FREQ;
     RESET <= '0';
 
     WAIT FOR LCD_RESET_TIME;
-    WAIT FOR LCD_INIT_TIME * 2;
+    WAIT FOR LCD_INIT_TIME;
+
+    -- Send data
+    ENABLE <= '1';
+    DATA <= (others => '1');
+    WAIT FOR LCD_CLK_FREQ * 10;
+
+    -- Stop sending
+    ENABLE <= '0';
+    DATA <= (others => '0');
   WAIT;
   END PROCESS test;
 END lcd_controller_arch;
