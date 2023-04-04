@@ -49,12 +49,23 @@ begin
         end if;
       when LCD_STATE_INIT =>
         if current_time < LCD_INIT_TIME then
+          -- Turn display on.
           LCD_RS <= '0';
           LCD_RW <= '0';
-          LCD_BUS <= "00111111"; -- Start the display
-          LCD_ENABLE <= '1';
+          LCD_BUS <= "00111111";
+
+          -- Cycle enable pin to ensure that the bus is read
+          -- and latched.
+          if current_time < LCD_ENABLE_CYCLE_TIME then
+            LCD_ENABLE <= '0';
+          elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+            LCD_ENABLE <= '1';
+          elsif current_time < (5 * LCD_ENABLE_CYCLE_TIME) then
+            LCD_ENABLE <= '0';
+          end if;
         else
-          LCD_ENABLE <= '0';
+          LCD_RS <= '0';
+          LCD_RW <= '0';
           LCD_BUS <= "00000000";
           next_state <= LCD_STATE_READY;
         end if;
@@ -68,7 +79,7 @@ begin
         else
           LCD_RS <= '0';
           LCD_RW <= '0';
-          LCD_BUS <= DATA((DATA'left - 2) downto 0);
+          LCD_BUS <= (others => '0');
         end if;
       when LCD_STATE_SEND =>
         -- TODO: What timings is needed here? And do we really
