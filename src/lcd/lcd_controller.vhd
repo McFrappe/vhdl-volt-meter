@@ -96,7 +96,7 @@ begin
     end if;
   end process;
 
-  -- FIXME: Keep constant? But what value?
-  LCD_CS1 <= '0';
+  -- Use IC1, i.e. the top row
+  LCD_CS1 <= '1';
   LCD_CS2 <= '0';
 end rtl;

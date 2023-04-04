@@ -43,7 +43,7 @@ package config is
   -- Clock frequency of the LCD display controller.
   -- This is used to ensure that we fulfill with the timing
   -- constraints defined below.
-  constant LCD_CLK_PERIOD : Time := (CLK_PERIOD * 16); -- FIXME: clock divider
+  constant LCD_CLK_PERIOD : Time := (CLK_PERIOD * 1); -- FIXME: clock divider
 
   -- Timing constraints of the LCD display.
   -- In order for the display to be able to fully execute
