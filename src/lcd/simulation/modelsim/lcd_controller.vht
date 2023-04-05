@@ -102,7 +102,7 @@ BEGIN
     WAIT UNTIL LCD_BUSY = '0';
 
     ENABLE <= '1';
-    DATA <= "0011001111";
+    DATA <= "011001111";
     WAIT FOR LCD_CLK_PERIOD * 2;
     ENABLE <= '0';
     DATA <= (others => '0');

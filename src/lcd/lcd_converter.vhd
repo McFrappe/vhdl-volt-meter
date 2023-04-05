@@ -33,17 +33,17 @@ begin
         end if;
 
         case character is
-          when 1  => VOLTAGE <= "1000110001";
-          when 2  => VOLTAGE <= "1000110010";
-          when 3  => VOLTAGE <= "1000110011";
-          when 4  => VOLTAGE <= "1000110100";
-          when 5  => VOLTAGE <= "1000110101";
-          when 6  => VOLTAGE <= "1000110110";
-          when 7  => VOLTAGE <= "1000110111";
-          when 8  => VOLTAGE <= "1000111001";
-          when 9  => VOLTAGE <= "1000111010";
-          when 10 => VOLTAGE <= "1000100001";
-          when 11 => VOLTAGE <= "1000100010";
+          when 1  => VOLTAGE <= "100110001";
+          when 2  => VOLTAGE <= "100110010";
+          when 3  => VOLTAGE <= "100110011";
+          when 4  => VOLTAGE <= "100110100";
+          when 5  => VOLTAGE <= "100110101";
+          when 6  => VOLTAGE <= "100110110";
+          when 7  => VOLTAGE <= "100110111";
+          when 8  => VOLTAGE <= "100111001";
+          when 9  => VOLTAGE <= "100111010";
+          when 10 => VOLTAGE <= "100100001";
+          when 11 => VOLTAGE <= "100100010";
           when others => ENABLE <= '0';
         end case;
       else
