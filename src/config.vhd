@@ -54,7 +54,7 @@ package config is
   constant LCD_POWER_ON_WAIT_TIME : Time := 20 ms; -- Min 15 ms
   constant LCD_RESET_TIME : Time := 5 ms; -- Min 4.1 ms
   constant LCD_CLEAR_TIME : Time := 1 ms; -- Min 100 us
-  constant LCD_ENABLE_CYCLE_TIME : Time := 100 us;
+  constant LCD_ENABLE_PULSE_WIDTH : Time := 500 ns;
 
   -- LCD commands
   constant LCD_RESET_CMD          : LCD_DATA_BUS := "00110000";

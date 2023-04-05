@@ -39,6 +39,8 @@ ARCHITECTURE lcd_controller_arch OF lcd_controller_vhd_tst IS
   SIGNAL LCD_ENABLE : STD_LOGIC;
   SIGNAL LCD_RS : STD_LOGIC;
   SIGNAL LCD_RW : STD_LOGIC;
+  SIGNAL LCD_ON : STD_LOGIC;
+  SIGNAL LCD_BL : STD_LOGIC;
   SIGNAL RESET : STD_LOGIC;
 
   COMPONENT lcd_controller
@@ -51,6 +53,8 @@ ARCHITECTURE lcd_controller_arch OF lcd_controller_vhd_tst IS
       LCD_ENABLE : OUT STD_LOGIC;
       LCD_RS : OUT STD_LOGIC;
       LCD_RW : OUT STD_LOGIC;
+      LCD_ON : OUT STD_LOGIC;
+      LCD_BL : OUT STD_LOGIC;
       RESET : IN STD_LOGIC
     );
   END COMPONENT;
@@ -65,6 +69,8 @@ BEGIN
     LCD_RS => LCD_RS,
     LCD_RW => LCD_RW,
     LCD_BUSY => LCD_BUSY,
+    LCD_ON => LCD_ON,
+    LCD_BL => LCD_BL,
     RESET => RESET
   );
 
@@ -78,6 +84,7 @@ BEGIN
 
   test : PROCESS
   BEGIN
+    RESET <= '0';
     ENABLE <= '0';
     DATA <= (others => '0');
 

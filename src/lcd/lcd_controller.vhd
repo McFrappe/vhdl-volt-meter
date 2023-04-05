@@ -6,7 +6,7 @@ entity lcd_controller is
   port (
     CLK, RESET, ENABLE : in std_logic;
     DATA : in LCD_DATA_BUFFER;
-    LCD_RS, LCD_RW, LCD_ENABLE : out std_logic;
+    LCD_RS, LCD_RW, LCD_ENABLE, LCD_BL, LCD_ON : out std_logic;
     LCD_BUS : out LCD_DATA_BUS;
     LCD_BUSY : out std_logic
   );
@@ -44,10 +44,10 @@ begin
         LCD_RW <= '0';
 
         if current_time < LCD_RESET_TIME then
-          if current_time < LCD_ENABLE_CYCLE_TIME then
+          if current_time < LCD_ENABLE_PULSE_WIDTH then
             LCD_BUS <= "00110000";
             LCD_ENABLE <= '1';
-          elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+          elsif current_time < (2 * LCD_ENABLE_PULSE_WIDTH) then
             LCD_ENABLE <= '0';
             LCD_BUS <= (others => '0');
           end if;
@@ -57,10 +57,10 @@ begin
 
       when LCD_STATE_CLEAR =>
         if current_time < LCD_CLEAR_TIME then
-          if current_time < LCD_ENABLE_CYCLE_TIME then
+          if current_time < LCD_ENABLE_PULSE_WIDTH then
             LCD_BUS <= "00110000";
             LCD_ENABLE <= '1';
-          elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+          elsif current_time < (2 * LCD_ENABLE_PULSE_WIDTH) then
             LCD_ENABLE <= '0';
             LCD_BUS <= (others => '0');
           end if;
@@ -69,36 +69,41 @@ begin
         end if;
 
       when LCD_STATE_INIT =>
-        if current_time < LCD_ENABLE_CYCLE_TIME then
+        if current_time < LCD_ENABLE_PULSE_WIDTH then
           -- Reset for a third time
           LCD_BUS <= LCD_RESET_CMD;
           LCD_ENABLE <= '1';
-        elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (2 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
-        elsif current_time < (4 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= (others => '0');
+        elsif current_time < (3 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_BUS <= LCD_SET_INTERFACE_CMD;
           LCD_ENABLE <= '1';
-        elsif current_time < (6 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (4 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
-        elsif current_time < (8 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= (others => '0');
+        elsif current_time < (5 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_BUS <= LCD_CONFIGURE_CMD;
           LCD_ENABLE <= '1';
-        elsif current_time < (10 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (6 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
-        elsif current_time < (12 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= (others => '0');
+        elsif current_time < (7 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_BUS <= LCD_DISP_OFF_CMD;
           LCD_ENABLE <= '1';
-        elsif current_time < (14 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (8 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
-        elsif current_time < (16 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= (others => '0');
+        elsif current_time < (9 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_BUS <= LCD_DISP_CLEAR_CMD;
           LCD_ENABLE <= '1';
-        elsif current_time < (18 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (10 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
-        elsif current_time < (20 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= (others => '0');
+        elsif current_time < (11 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_BUS <= LCD_ENTRY_MODE_CMD;
           LCD_ENABLE <= '1';
-        elsif current_time < (22 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (12 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
           LCD_BUS <= (others => '0');
         else
@@ -120,10 +125,13 @@ begin
 
       when LCD_STATE_WRITE =>
         LCD_BUSY <= '1';
-        if current_time < LCD_ENABLE_CYCLE_TIME then
+        if current_time < LCD_ENABLE_PULSE_WIDTH then
           LCD_ENABLE <= '1';
-        elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (2 * LCD_ENABLE_PULSE_WIDTH) then
           LCD_ENABLE <= '0';
+          LCD_RS <= '0';
+          LCD_RW <= '0';
+          LCD_BUS <= (others => '0');
         else
           next_state <= LCD_STATE_READY;
         end if;
@@ -146,4 +154,8 @@ begin
       current_state <= next_state;
     end if;
   end process;
+
+  -- Turn on backlight and power on LCD display
+  LCD_BL <= '1';
+  LCD_ON <= '1';
 end rtl;
