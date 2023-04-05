@@ -36,10 +36,7 @@ ARCHITECTURE lcd_controller_arch OF lcd_controller_vhd_tst IS
   SIGNAL DATA : LCD_DATA_BUFFER;
   SIGNAL LCD_BUS : LCD_DATA_BUS;
   SIGNAL LCD_BUSY : STD_LOGIC;
-  SIGNAL LCD_CS1 : STD_LOGIC;
-  SIGNAL LCD_CS2 : STD_LOGIC;
   SIGNAL LCD_ENABLE : STD_LOGIC;
-  SIGNAL LCD_RESET : STD_LOGIC;
   SIGNAL LCD_RS : STD_LOGIC;
   SIGNAL LCD_RW : STD_LOGIC;
   SIGNAL RESET : STD_LOGIC;
@@ -51,10 +48,7 @@ ARCHITECTURE lcd_controller_arch OF lcd_controller_vhd_tst IS
       DATA : IN LCD_DATA_BUFFER;
       LCD_BUS : OUT LCD_DATA_BUS;
       LCD_BUSY : OUT STD_LOGIC;
-      LCD_CS1 : OUT STD_LOGIC;
-      LCD_CS2 : OUT STD_LOGIC;
       LCD_ENABLE : OUT STD_LOGIC;
-      LCD_RESET : OUT STD_LOGIC;
       LCD_RS : OUT STD_LOGIC;
       LCD_RW : OUT STD_LOGIC;
       RESET : IN STD_LOGIC
@@ -67,10 +61,7 @@ BEGIN
     DATA => DATA,
     ENABLE => ENABLE,
     LCD_BUS => LCD_BUS,
-    LCD_CS1 => LCD_CS1,
-    LCD_CS2 => LCD_CS2,
     LCD_ENABLE => LCD_ENABLE,
-    LCD_RESET => LCD_RESET,
     LCD_RS => LCD_RS,
     LCD_RW => LCD_RW,
     LCD_BUSY => LCD_BUSY,
@@ -89,10 +80,6 @@ BEGIN
   BEGIN
     ENABLE <= '0';
     DATA <= (others => '0');
-
-    RESET <= '1';
-    WAIT FOR LCD_CLK_PERIOD;
-    RESET <= '0';
 
     -- Wait until ready
     WAIT UNTIL LCD_BUSY = '0';

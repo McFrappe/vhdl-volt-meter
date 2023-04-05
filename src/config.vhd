@@ -24,11 +24,12 @@ package config is
   -- States for state machine used to initialize the LCD
   -- display.
   type LCD_STATE is (
-    LCD_STATE_POWER_UP,
-    LCD_STATE_START,
+    LCD_STATE_POWER_ON,
+    LCD_STATE_RESET,
+    LCD_STATE_CLEAR,
     LCD_STATE_INIT,
     LCD_STATE_READY,
-    LCD_STATE_SEND
+    LCD_STATE_WRITE
   );
 
   -- The bidirectional data bus used to read/write data
@@ -50,8 +51,16 @@ package config is
   -- In order for the display to be able to fully execute
   -- the actions needed for a certain action, we need to wait
   -- for a specific amount of time (according to the datasheet).
-  constant LCD_POWER_UP_WAIT_TIME : Time := 50 ms;
-  constant LCD_RESET_TIME : Time := 10 us; -- Min is 1 us
-  constant LCD_INIT_TIME : Time := 50 us;
-  constant LCD_ENABLE_CYCLE_TIME : Time := 500 ns;
+  constant LCD_POWER_ON_WAIT_TIME : Time := 20 ms; -- Min 15 ms
+  constant LCD_RESET_TIME : Time := 5 ms; -- Min 4.1 ms
+  constant LCD_CLEAR_TIME : Time := 1 ms; -- Min 100 us
+  constant LCD_ENABLE_CYCLE_TIME : Time := 100 us;
+
+  -- LCD commands
+  constant LCD_RESET_CMD          : LCD_DATA_BUS := "00110000";
+  constant LCD_SET_INTERFACE_CMD  : LCD_DATA_BUS := "00110000";
+  constant LCD_CONFIGURE_CMD      : LCD_DATA_BUS := "00110000";
+  constant LCD_DISP_OFF_CMD       : LCD_DATA_BUS := "00001000";
+  constant LCD_DISP_CLEAR_CMD     : LCD_DATA_BUS := "00000001";
+  constant LCD_ENTRY_MODE_CMD     : LCD_DATA_BUS := "00000111";
 end package config;

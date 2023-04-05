@@ -7,7 +7,6 @@ entity lcd_controller is
     CLK, RESET, ENABLE : in std_logic;
     DATA : in LCD_DATA_BUFFER;
     LCD_RS, LCD_RW, LCD_ENABLE : out std_logic;
-    LCD_CS1, LCD_CS2, LCD_RESET : out std_logic;
     LCD_BUS : out LCD_DATA_BUS;
     LCD_BUSY : out std_logic
   );
@@ -21,16 +20,15 @@ begin
   -- Accepts an instruction to execute, or data to write to
   -- the LCD display RAM.
   ---------------------------------------------------------
-  -- TODO: What should CS1 and CS2 be? Constant?
   process (current_time, current_state, ENABLE, DATA, RESET) is
   begin
     next_state <= current_state;
 
     case current_state is
-      when LCD_STATE_POWER_UP =>
+      when LCD_STATE_POWER_ON =>
         -- Wait for quite a while in order to make sure that
         -- the LCD display has power, etc.
-        if current_time < LCD_POWER_UP_WAIT_TIME then
+        if current_time < LCD_POWER_ON_WAIT_TIME then
           -- Initialize signals
           LCD_RS <= '0';
           LCD_RW <= '0';
@@ -38,58 +36,93 @@ begin
           LCD_BUSY <= '1';
           LCD_BUS <= (others => '0');
         else
-          next_state <= LCD_STATE_START;
+          next_state <= LCD_STATE_RESET;
         end if;
-      when LCD_STATE_START =>
-        if current_time < LCD_RESET_TIME then
-          LCD_RESET <= '1';
-        else
-          LCD_RESET <= '0';
-          next_state <= LCD_STATE_INIT;
-        end if;
-      when LCD_STATE_INIT =>
-        if current_time < LCD_INIT_TIME then
-          -- Turn display on.
-          LCD_RS <= '0';
-          LCD_RW <= '0';
-          LCD_BUS <= "00111111";
 
-          -- Cycle enable pin to ensure that the bus is read
-          -- and latched.
+      when LCD_STATE_RESET =>
+        LCD_RS <= '0';
+        LCD_RW <= '0';
+
+        if current_time < LCD_RESET_TIME then
           if current_time < LCD_ENABLE_CYCLE_TIME then
-            LCD_ENABLE <= '0';
-          elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+            LCD_BUS <= "00110000";
             LCD_ENABLE <= '1';
-          elsif current_time < (5 * LCD_ENABLE_CYCLE_TIME) then
+          elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
             LCD_ENABLE <= '0';
+            LCD_BUS <= (others => '0');
           end if;
         else
-          LCD_RS <= '0';
-          LCD_RW <= '0';
-          LCD_BUS <= "00000000";
+          next_state <= LCD_STATE_CLEAR;
+        end if;
+
+      when LCD_STATE_CLEAR =>
+        if current_time < LCD_CLEAR_TIME then
+          if current_time < LCD_ENABLE_CYCLE_TIME then
+            LCD_BUS <= "00110000";
+            LCD_ENABLE <= '1';
+          elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+            LCD_ENABLE <= '0';
+            LCD_BUS <= (others => '0');
+          end if;
+        else
+          next_state <= LCD_STATE_INIT;
+        end if;
+
+      when LCD_STATE_INIT =>
+        if current_time < LCD_ENABLE_CYCLE_TIME then
+          -- Reset for a third time
+          LCD_BUS <= LCD_RESET_CMD;
+          LCD_ENABLE <= '1';
+        elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+        elsif current_time < (4 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= LCD_SET_INTERFACE_CMD;
+          LCD_ENABLE <= '1';
+        elsif current_time < (6 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+        elsif current_time < (8 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= LCD_CONFIGURE_CMD;
+          LCD_ENABLE <= '1';
+        elsif current_time < (10 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+        elsif current_time < (12 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= LCD_DISP_OFF_CMD;
+          LCD_ENABLE <= '1';
+        elsif current_time < (14 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+        elsif current_time < (16 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= LCD_DISP_CLEAR_CMD;
+          LCD_ENABLE <= '1';
+        elsif current_time < (18 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+        elsif current_time < (20 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_BUS <= LCD_ENTRY_MODE_CMD;
+          LCD_ENABLE <= '1';
+        elsif current_time < (22 * LCD_ENABLE_CYCLE_TIME) then
+          LCD_ENABLE <= '0';
+          LCD_BUS <= (others => '0');
+        else
           next_state <= LCD_STATE_READY;
         end if;
+
       when LCD_STATE_READY =>
         LCD_BUSY <= '0';
         if ENABLE = '1' then
           LCD_RS <= DATA(DATA'left);
           LCD_RW <= DATA(DATA'left - 1);
           LCD_BUS <= DATA((DATA'left - 2) downto 0);
-          next_state <= LCD_STATE_SEND;
+          next_state <= LCD_STATE_WRITE;
         else
           LCD_RS <= '0';
           LCD_RW <= '0';
           LCD_BUS <= (others => '0');
         end if;
-      when LCD_STATE_SEND =>
-        -- TODO: What timings is needed here? And do we really
-        -- need to cycle between on and off?
+
+      when LCD_STATE_WRITE =>
         LCD_BUSY <= '1';
         if current_time < LCD_ENABLE_CYCLE_TIME then
-          LCD_ENABLE <= '0';
-        elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
           LCD_ENABLE <= '1';
-        elsif current_time < (5 * LCD_ENABLE_CYCLE_TIME) then
+        elsif current_time < (2 * LCD_ENABLE_CYCLE_TIME) then
           LCD_ENABLE <= '0';
         else
           next_state <= LCD_STATE_READY;
@@ -101,7 +134,7 @@ begin
   process (CLK, RESET) is
   begin
     if RESET = '1' then
-      current_state <= LCD_STATE_START;
+      current_state <= LCD_STATE_RESET;
     elsif CLK'event and rising_edge(CLK) then
       if next_state /= current_state then
           current_time <= 0 ns;
@@ -113,8 +146,4 @@ begin
       current_state <= next_state;
     end if;
   end process;
-
-  -- Use IC1, i.e. the top row
-  LCD_CS1 <= '1';
-  LCD_CS2 <= '0';
 end rtl;
