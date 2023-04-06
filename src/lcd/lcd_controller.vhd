@@ -110,14 +110,14 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
-          next_state <= LCD_STATE_DISP_OFF;
+          next_state <= LCD_STATE_DISP_SWITCH;
         end if;
 
-      when LCD_STATE_DISP_OFF =>
+      when LCD_STATE_DISP_SWITCH =>
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
-            LCD_BUS <= LCD_DISP_OFF_CMD;
+            LCD_BUS <= LCD_DISP_SWITCH_CMD;
             LCD_ENABLE <= '0';
           elsif current_time < LCD_TSP1 + LCD_TPW then
             LCD_ENABLE <= '1';

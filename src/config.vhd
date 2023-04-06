@@ -30,7 +30,7 @@ package config is
     LCD_STATE_RESET_3,
     LCD_STATE_FN_SET,
     LCD_STATE_CONFIGURE,
-    LCD_STATE_DISP_OFF,
+    LCD_STATE_DISP_SWITCH,
     LCD_STATE_DISP_CLEAR,
     LCD_STATE_ENTRY_MODE_SET,
     LCD_STATE_READY,
@@ -73,7 +73,7 @@ package config is
   constant LCD_RESET_CMD          : LCD_DATA_BUS := "00110000";
   constant LCD_FN_SET_CMD         : LCD_DATA_BUS := "00110000";
   constant LCD_CONFIGURE_CMD      : LCD_DATA_BUS := "00110000";
-  constant LCD_DISP_OFF_CMD       : LCD_DATA_BUS := "00001000";
+  constant LCD_DISP_SWITCH_CMD    : LCD_DATA_BUS := "00001101";
   constant LCD_DISP_CLEAR_CMD     : LCD_DATA_BUS := "00000001";
   constant LCD_ENTRY_MODE_SET_CMD : LCD_DATA_BUS := "00000111";
 end package config;
