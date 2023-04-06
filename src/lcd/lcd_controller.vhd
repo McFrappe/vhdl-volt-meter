@@ -26,11 +26,11 @@ begin
 
     case current_state is
       when LCD_STATE_POWER_ON =>
+        LCD_BUSY <= '1';
         -- Wait for quite a while in order to make sure that
         -- the LCD display has power, etc.
         if current_time < LCD_POWER_ON_WAIT_TIME then
           -- Initialize signals
-          LCD_BUSY <= '1';
           LCD_RS <= '0';
           LCD_ENABLE <= '0';
           LCD_BUS <= (others => '0');
@@ -39,6 +39,7 @@ begin
         end if;
 
       when LCD_STATE_RESET =>
+        LCD_BUSY <= '1';
         if current_time < LCD_RESET_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -50,10 +51,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_RESET_2;
         end if;
 
       when LCD_STATE_RESET_2 =>
+        LCD_BUSY <= '1';
         if current_time < LCD_RESET_2_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -65,10 +68,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_RESET_3;
         end if;
 
       when LCD_STATE_RESET_3 =>
+        LCD_BUSY <= '1';
         if current_time < LCD_RESET_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -80,10 +85,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_FN_SET;
         end if;
 
       when LCD_STATE_FN_SET =>
+        LCD_BUSY <= '1';
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -95,10 +102,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_CONFIGURE;
         end if;
 
       when LCD_STATE_CONFIGURE =>
+        LCD_BUSY <= '1';
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -110,10 +119,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_DISP_SWITCH;
         end if;
 
       when LCD_STATE_DISP_SWITCH =>
+        LCD_BUSY <= '1';
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -125,10 +136,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_DISP_CLEAR;
         end if;
 
       when LCD_STATE_DISP_CLEAR =>
+        LCD_BUSY <= '1';
         if current_time < LCD_RESET_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -140,10 +153,12 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_ENTRY_MODE_SET;
         end if;
 
       when LCD_STATE_ENTRY_MODE_SET =>
+        LCD_BUSY <= '1';
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -155,10 +170,30 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
+          LCD_BUS <= (others => '0');
+          next_state <= LCD_STATE_DISP_ON;
+        end if;
+
+      when LCD_STATE_DISP_ON =>
+        LCD_BUSY <= '1';
+        if current_time < LCD_CMD_TIME + LCD_TC then
+          if current_time < LCD_TSP1 then
+            LCD_RS <= '0';
+            LCD_BUS <= LCD_DISP_ON_CMD;
+            LCD_ENABLE <= '0';
+          elsif current_time < LCD_TSP1 + LCD_TPW then
+            LCD_ENABLE <= '1';
+          else
+            LCD_ENABLE <= '0';
+          end if;
+        else
+          LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_READY;
         end if;
 
       when LCD_STATE_READY =>
+        LCD_RS <= '0';
+        LCD_BUS <= (others => '0');
         if ENABLE = '1' then
           LCD_BUSY <= '1';
           next_state <= LCD_STATE_WRITE;
@@ -167,10 +202,12 @@ begin
         end if;
 
       when LCD_STATE_WRITE =>
+        LCD_BUSY <= '1';
+        LCD_RS <= DATA(DATA'left);
+        LCD_BUS <= DATA((DATA'left - 1) downto 0);
+
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
-            LCD_RS <= DATA(DATA'left);
-            LCD_BUS <= DATA((DATA'left - 1) downto 0);
             LCD_ENABLE <= '0';
           elsif current_time < LCD_TSP1 + LCD_TPW then
             LCD_ENABLE <= '1';
@@ -178,7 +215,6 @@ begin
             LCD_ENABLE <= '0';
           end if;
         else
-          LCD_RS <= '0';
           LCD_BUS <= (others => '0');
           next_state <= LCD_STATE_READY;
         end if;

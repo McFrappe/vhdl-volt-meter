@@ -21,18 +21,14 @@ begin
   -- the input ADC bits takes multiple clock cycles.
   ---------------------------------------------------------
   process (CLK, LCD_BUSY)
-    variable character : integer range 0 to 12 := 0;
+    variable character : integer range 0 to 10 := 0;
   begin
     if CLK'event and rising_edge(CLK) then
       if LCD_BUSY = '0' then
         ENABLE <= '1';
 
-        -- Go through all 12 characters and write to LCD
-        if (character < 12) then
-          character := character + 1;
-        end if;
-
         case character is
+          when 0  => VOLTAGE <= "100110000";
           when 1  => VOLTAGE <= "100110001";
           when 2  => VOLTAGE <= "100110010";
           when 3  => VOLTAGE <= "100110011";
@@ -40,12 +36,15 @@ begin
           when 5  => VOLTAGE <= "100110101";
           when 6  => VOLTAGE <= "100110110";
           when 7  => VOLTAGE <= "100110111";
-          when 8  => VOLTAGE <= "100111001";
-          when 9  => VOLTAGE <= "100111010";
-          when 10 => VOLTAGE <= "100100001";
-          when 11 => VOLTAGE <= "100100010";
+          when 8  => VOLTAGE <= "100111000";
+          when 9  => VOLTAGE <= "100111001";
           when others => ENABLE <= '0';
         end case;
+
+        -- Go through all 9 characters and write to LCD
+        if (character < 10) then
+          character := character + 1;
+        end if;
       else
         ENABLE <= '0';
       end if;
