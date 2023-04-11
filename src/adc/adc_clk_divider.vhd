@@ -17,17 +17,11 @@ begin
   -- required by the ADC chip (max 1.8 MHz on 5V).
   ---------------------------------------------------------
 	DIVIDER : process (CLK, RESET)
-		variable counter : integer := 0;
 	begin
 		if RESET = '1' then
-			counter := 0;
 			feedback <= '0';
-		elsif rising_edge(CLK) then
-			counter := counter + 1;
-			if counter >= (ADC_CLK_PERIOD / CLK_PERIOD) then
-				feedback <= not feedback;
-				counter := 0;
-			end if;
+		elsif CLK'event and rising_edge(CLK) then
+			feedback <= not feedback;
 		end if;
 	end process;
 
