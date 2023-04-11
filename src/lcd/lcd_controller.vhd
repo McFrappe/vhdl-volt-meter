@@ -24,6 +24,8 @@ begin
   begin
     next_state <= current_state;
 
+    -- TODO: Remove compilation warnings by always
+    -- setting every out pin in each state and branch.
     case current_state is
       when LCD_STATE_POWER_ON =>
         LCD_BUSY <= '1';
