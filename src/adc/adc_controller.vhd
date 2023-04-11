@@ -6,7 +6,7 @@ entity adc_controller is
   port (
     CLK, RESET : in std_logic;
     SPI_MISO : in std_logic;
-    SPI_MOSI, SPI_SS : out std_logic;
+    SPI_MOSI, SPI_SS, SPI_BUSY : out std_logic;
     ADC_BIT : out std_logic
   );
 end entity;
@@ -23,15 +23,14 @@ begin
   begin
     next_state <= current_state;
 
-    -- TODO: We actually need busy flag to ensure that
-    -- we do not read anything until a conversion has been completed
-    -- and we are in ADC_STATE_READ_DATA;
     case current_state is
       when ADC_STATE_POWER_ON =>
         -- Initialize
         SPI_MOSI <= '0';
         SPI_SS <= '1';
+        SPI_BUSY <= '1';
         ADC_BIT <= '0';
+
         if current_time >= ADC_POWER_ON_WAIT_TIME then
           next_state <= ADC_STATE_RESET;
         end if;
@@ -39,14 +38,17 @@ begin
       when ADC_STATE_RESET =>
         SPI_SS <= '1';
         SPI_MOSI <= '1';
+        SPI_BUSY <= '1';
         ADC_BIT <= '0';
+
         if current_time >= ADC_RESET_TIME then
           next_state <= ADC_STATE_START_CONVERSION;
         end if;
 
       when ADC_STATE_START_CONVERSION =>
-        ADC_BIT <= '0';
         SPI_SS <= '0';
+        SPI_BUSY <= '1';
+        ADC_BIT <= '0';
 
         -- Use Single-Ended mode with channel 0.
         if current_time < ADC_CLK_PERIOD then
@@ -74,12 +76,14 @@ begin
       when ADC_STATE_READ_DATA =>
         SPI_SS <= '0'; -- Keep SS low until all data has been read
         SPI_MOSI <= '0'; -- Dont care
+        SPI_BUSY <= '0';
 
         if current_time < ADC_TCONV + ADC_ZERO_PADDING_TIME then
           -- Read a total of 16 bits, 12-bits ADC value and 4 zeros.
           ADC_BIT <= SPI_MISO;
         else
           ADC_BIT <= '0';
+          SPI_BUSY <= '1';
           next_state <= ADC_STATE_START_CONVERSION;
         end if;
     end case;
