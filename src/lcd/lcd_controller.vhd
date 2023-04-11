@@ -20,7 +20,7 @@ begin
   -- Accepts an instruction to execute, or data to write to
   -- the LCD display RAM.
   ---------------------------------------------------------
-  process (current_time, current_state, ENABLE, DATA, RESET) is
+  process (current_time, current_state, ENABLE, DATA) is
   begin
     next_state <= current_state;
 
