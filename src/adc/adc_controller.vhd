@@ -11,7 +11,7 @@ entity acd_controller is
   );
 end entity;
 
-architecture rtl of adc_controller is
+architecture rtl of acd_controller is
   signal current_state, next_state : ACD_STATE;
   signal current_time : Time := 0 ns;
 begin
@@ -44,32 +44,36 @@ begin
 
       when ADC_STATE_START_CONVERSION =>
         -- Use Single-Ended mode with channel 0.
-        if current_time < ADC_T_CSH then
+        if current_time < ADC_CLK_PERIOD then
+          -- Wait before starting conversion
           SPI_SS <= '1';
           SPI_MOSI <= '0';
-        elsif current_time < (4 * ADC_T_SUCS) then
+        elsif current_time < (2 * ADC_CLK_PERIOD) then
           -- Start bit
           SPI_SS <= '0';
           SPI_MOSI <= '1';
-        elsif current_time < (6 * ADC_T_SUCS) then
+        elsif current_time < (3 * ADC_CLK_PERIOD) then
           -- SGL/DIFF
           SPI_MOSI <= '1';
-        elsif current_time < (8 * ADC_T_SUCS) then
+        elsif current_time < (4 * ADC_CLK_PERIOD) then
           -- ODD/SIGN
           SPI_MOSI <= '0';
-        elsif current_time < (10 * ADC_T_SUCS) then
+        elsif current_time < (5 * ADC_CLK_PERIOD) then
           -- MS/BF
           SPI_MOSI <= '1';
         else
           -- TODO: Does a state change require a clock cycle to complete?
           -- Will we start reading at the NULL-bit or at B11?
           next_state <= ADC_STATE_READ_DATA;
+        end if;
 
       when ADC_STATE_READ_DATA =>
-        if current_time < ADC_T_CONV then
-          -- Read
-        elsif current_time < ADC_ZERO_PADDING_TIME then
-          -- Read 4 padding zeros to fill shift register completely.
+        SPI_SS <= '0'; -- Keep SS low until all data has been read
+        SPI_MOSI <= '0'; -- Dont care
+
+        if current_time < ADC_TCONV + ADC_ZERO_PADDING_TIME then
+          -- Read a total of 16 bits, 12-bits ADC value and 4 zeros.
+          ADC_BIT <= SPI_MISO;
         else
           next_state <= ADC_STATE_START_CONVERSION;
         end if;

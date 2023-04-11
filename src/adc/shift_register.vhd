@@ -1,16 +1,17 @@
 library ieee;
+use work.config.all;
 use ieee.std_logic_1164.all;
 
 entity shift_register is
   port (
     CLK, RESET : in std_logic;
     SR_IN : in std_logic;
-    SR_OUT : out ADC_RESOLUTION;
+    SR_OUT : out ADC_RESOLUTION
   );
 end entity;
 
 architecture rtl of shift_register is
-	signal bits : ADC_RESOLUTION;
+	signal bits : ADC_RESOLUTION := (others => '0');
 begin
   ---------------------------------------------------------
   -- Accepts a single bit input and shifts the existing

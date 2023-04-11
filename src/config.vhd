@@ -18,20 +18,19 @@ package config is
     ACD_STATE_READ_DATA
   );
 
+  constant ADC_BITS : integer := 16;
+
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
-  subtype ADC_RESOLUTION is std_logic_vector (15 downto 0);
+  subtype ADC_RESOLUTION is std_logic_vector (ADC_BITS - 1 downto 0);
 
   -- Clock period for the serial interface
-  constant SPI_CLOCK_PERIOD : Time := CLK_PERIOD * 50;
+  constant ADC_CLK_PERIOD : Time := CLK_PERIOD * 50;
 
   -- Timing constraints for ADC
-  constant ADC_T_CSH : Time := SPI_CLOCK_PERIOD;
-  constant ADC_T_SUCS : Time := SPI_CLOCK_PERIOD / 2;
-  constant ADC_T_CONV : Time := T_SUCS * 26; -- 13 full clock cycles
-
   constant ADC_POWER_ON_WAIT_TIME : Time := 10 ms;
-  constant ADC_ZERO_PADDING_TIME : Time := ADC_T_SUCS * 8; -- 4 zeros
+  constant ADC_ZERO_PADDING_TIME : Time := ADC_CLK_PERIOD * 4; -- 4 zeros
+  constant ADC_TCONV : Time := ADC_CLK_PERIOD * (ADC_BITS + 1); -- inc. NULL-bit
 
   ---------------------------------------------------------
   -- LCD (ATM12864D)
