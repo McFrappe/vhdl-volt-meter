@@ -11,17 +11,17 @@ package config is
   ---------------------------------------------------------
   -- ADC (MCP3202)
   ---------------------------------------------------------
-  type ACD_STATE is (
-    ACD_STATE_POWER_ON,
-    ACD_STATE_RESET,
-    ACD_STATE_START_CONVERSION,
-    ACD_STATE_READ_DATA
+  type ADC_STATE is (
+    ADC_STATE_POWER_ON,
+    ADC_STATE_RESET,
+    ADC_STATE_START_CONVERSION,
+    ADC_STATE_READ_DATA
   );
 
-  constant ADC_BITS : integer := 16;
 
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
+  constant ADC_BITS : integer := 16;
   subtype ADC_RESOLUTION is std_logic_vector (ADC_BITS - 1 downto 0);
 
   -- Clock period for the serial interface
@@ -29,6 +29,7 @@ package config is
 
   -- Timing constraints for ADC
   constant ADC_POWER_ON_WAIT_TIME : Time := 10 ms;
+  constant ADC_RESET_TIME : Time := ADC_CLK_PERIOD * 10;
   constant ADC_ZERO_PADDING_TIME : Time := ADC_CLK_PERIOD * 4; -- 4 zeros
   constant ADC_TCONV : Time := ADC_CLK_PERIOD * (ADC_BITS + 1); -- inc. NULL-bit
 
