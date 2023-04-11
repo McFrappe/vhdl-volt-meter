@@ -101,7 +101,7 @@ refer to the applicable agreement for further details.
 )
 (pin
 	(output)
-	(rect 848 592 1025 608)
+	(rect 848 608 1025 624)
 	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
 	(text "VOLTAGE[15..0]" (rect 90 0 171 12)(font "Arial" ))
 	(pt 0 8)
@@ -218,9 +218,9 @@ refer to the applicable agreement for further details.
 	)
 )
 (symbol
-	(rect 624 568 824 680)
+	(rect 624 584 832 696)
 	(text "shift_register" (rect 5 0 69 12)(font "Arial" ))
-	(text "inst2" (rect 8 96 30 113)(font "Intel Clear" ))
+	(text "inst7" (rect 8 96 30 113)(font "Intel Clear" ))
 	(port
 		(pt 0 32)
 		(input)
@@ -243,14 +243,21 @@ refer to the applicable agreement for further details.
 		(line (pt 0 64)(pt 16 64))
 	)
 	(port
-		(pt 200 32)
+		(pt 0 80)
+		(input)
+		(text "SPI_BUSY" (rect 0 0 54 12)(font "Arial" ))
+		(text "SPI_BUSY" (rect 21 75 75 87)(font "Arial" ))
+		(line (pt 0 80)(pt 16 80))
+	)
+	(port
+		(pt 208 32)
 		(output)
 		(text "SR_OUT[15..0]" (rect 0 0 75 12)(font "Arial" ))
-		(text "SR_OUT[15..0]" (rect 116 27 191 39)(font "Arial" ))
-		(line (pt 200 32)(pt 184 32)(line_width 3))
+		(text "SR_OUT[15..0]" (rect 124 27 199 39)(font "Arial" ))
+		(line (pt 208 32)(pt 192 32)(line_width 3))
 	)
 	(drawing
-		(rectangle (rect 16 16 184 96))
+		(rectangle (rect 16 16 192 96))
 	)
 )
 (connector
@@ -298,16 +305,44 @@ refer to the applicable agreement for further details.
 	(pt 848 472)
 )
 (connector
+	(pt 800 504)
+	(pt 816 504)
+)
+(connector
+	(pt 816 552)
+	(pt 816 504)
+)
+(connector
+	(pt 832 488)
+	(pt 832 568)
+)
+(connector
 	(pt 800 488)
+	(pt 832 488)
+)
+(connector
+	(pt 832 488)
 	(pt 848 488)
 )
 (connector
-	(pt 576 456)
-	(pt 576 600)
+	(pt 816 552)
+	(pt 592 552)
 )
 (connector
-	(pt 576 600)
-	(pt 624 600)
+	(pt 608 568)
+	(pt 832 568)
+)
+(connector
+	(pt 576 456)
+	(pt 576 616)
+)
+(connector
+	(pt 592 552)
+	(pt 592 648)
+)
+(connector
+	(pt 608 568)
+	(pt 608 664)
 )
 (connector
 	(pt 544 456)
@@ -318,42 +353,35 @@ refer to the applicable agreement for further details.
 	(pt 608 456)
 )
 (connector
-	(pt 800 504)
-	(pt 816 504)
-)
-(connector
-	(pt 816 552)
-	(pt 816 504)
-)
-(connector
-	(pt 816 552)
-	(pt 608 552)
-)
-(connector
-	(pt 608 552)
-	(pt 608 632)
-)
-(connector
-	(pt 608 632)
-	(pt 624 632)
-)
-(connector
-	(pt 824 600)
-	(pt 848 600)
-	(bus)
-)
-(connector
-	(pt 624 616)
-	(pt 560 616)
-)
-(connector
 	(pt 560 472)
 	(pt 560 520)
 )
 (connector
 	(pt 560 520)
-	(pt 560 616)
+	(pt 560 632)
+)
+(connector
+	(pt 576 616)
+	(pt 624 616)
+)
+(connector
+	(pt 560 632)
+	(pt 624 632)
+)
+(connector
+	(pt 592 648)
+	(pt 624 648)
+)
+(connector
+	(pt 608 664)
+	(pt 624 664)
+)
+(connector
+	(pt 832 616)
+	(pt 848 616)
+	(bus)
 )
 (junction (pt 344 472))
 (junction (pt 576 456))
 (junction (pt 560 520))
+(junction (pt 832 488))

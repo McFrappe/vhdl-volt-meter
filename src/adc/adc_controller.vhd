@@ -80,16 +80,18 @@ begin
 
       when ADC_STATE_READ_DATA =>
         SPI_MOSI <= '0'; -- Dont care
-        SPI_BUSY <= '0';
 
-        if current_time < ADC_TCONV then
-          -- Keep SS low until all data has been read
+        if current_time < ADC_CLK_PERIOD then
+          -- Skip NULL bit
           SPI_SS <= '0';
-          -- Read a total of 16 bits, 12-bits ADC value and 4 zeros.
+          SPI_BUSY <= '1';
+        elsif current_time < ADC_TCONV then
+          SPI_SS <= '0';
+          SPI_BUSY <= '0';
           ADC_BIT <= SPI_MISO;
         else
           ADC_BIT <= '0';
-          SPI_BUSY <= '1';
+          SPI_BUSY <= '1'; -- TODO: remove? Might miss a bit in shift reg
           SPI_SS <= '1';
           next_state <= ADC_STATE_START_CONVERSION;
         end if;

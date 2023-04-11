@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 entity shift_register is
   port (
     CLK, RESET : in std_logic;
-    SR_IN : in std_logic;
+    SR_IN, SPI_BUSY : in std_logic;
     SR_OUT : out ADC_RESOLUTION
   );
 end entity;
@@ -22,7 +22,9 @@ begin
 		if RESET = '1' then
 			bits <= (others => '0');
 		elsif rising_edge(CLK) then
-			bits <= bits(bits'left - 1 downto 0) & SR_IN;
+			if SPI_BUSY = '0' then
+				bits <= bits(bits'left - 1 downto 0) & SR_IN;
+			end if;
 		end if;
 	end process;
 	SR_OUT <= bits;
