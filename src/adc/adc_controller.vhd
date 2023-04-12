@@ -6,7 +6,7 @@ entity adc_controller is
   port (
     CLK, RESET : in std_logic;
     SPI_MISO : in std_logic;
-    SPI_MOSI, SPI_SS, SPI_BUSY : out std_logic;
+    SPI_CLK, SPI_MOSI, SPI_SS, SPI_BUSY : out std_logic;
     ADC_BIT : out std_logic
   );
 end entity;
@@ -114,4 +114,6 @@ begin
       current_state <= next_state;
     end if;
   end process;
+
+  SPI_CLK <= CLK;
 end rtl;
