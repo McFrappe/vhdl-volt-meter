@@ -71,7 +71,7 @@ set_location_assignment PIN_AB12 -to RESET
 set_location_assignment PIN_AK29 -to SPI_MOSI
 set_location_assignment PIN_AG26 -to SPI_CLK
 set_location_assignment PIN_AH27 -to SPI_MISO
-set_location_assignment PIN_AE24 -to SPI_SS
+set_location_assignment PIN_AF26 -to SPI_SS
 set_location_assignment PIN_Y21 -to VOLTAGE[15]
 set_location_assignment PIN_W21 -to VOLTAGE[14]
 set_location_assignment PIN_W20 -to VOLTAGE[13]
