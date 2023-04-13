@@ -26,7 +26,6 @@ package config is
 
   -- Clock period for the serial interface
   constant ADC_CLK_PERIOD : Time := CLK_PERIOD * 50;
-  constant ADC_CLK_PULSE : Time := ADC_CLK_PERIOD / 4;
 
   -- Timing constraints for ADC
   constant ADC_POWER_ON_WAIT_TIME : Time := 10 ms;

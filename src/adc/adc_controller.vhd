@@ -103,7 +103,7 @@ begin
   begin
     if RESET = '1' then
       current_state <= ADC_STATE_RESET;
-    elsif CLK'event and falling_edge(CLK) then
+    elsif CLK'event and rising_edge(CLK) then
       if next_state /= current_state then
           current_time <= 0 ns;
       else
