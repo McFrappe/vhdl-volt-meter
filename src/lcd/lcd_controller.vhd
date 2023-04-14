@@ -208,7 +208,7 @@ begin
         LCD_RS <= DATA(DATA'left);
         LCD_BUS <= DATA((DATA'left - 1) downto 0);
 
-        if current_time < LCD_CMD_TIME + LCD_TC then
+        if current_time < LCD_RESET_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_ENABLE <= '0';
           elsif current_time < LCD_TSP1 + LCD_TPW then

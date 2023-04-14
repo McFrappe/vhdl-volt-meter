@@ -9,6 +9,16 @@ package config is
   constant CLK_PERIOD : Time := 20 ns;
 
   ---------------------------------------------------------
+  -- Converter
+  ---------------------------------------------------------
+  type CONVERTER_STATE is (
+    CONVERTER_STATE_WAIT,
+    CONVERTER_STATE_READ,
+    CONVERTER_STATE_CLEAR_SCREEN,
+    CONVERTER_STATE_SHOW_VOLTAGE
+  );
+
+  ---------------------------------------------------------
   -- ADC (MCP3202)
   ---------------------------------------------------------
   type ADC_STATE is (
@@ -21,6 +31,7 @@ package config is
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
   constant ADC_BITS : integer := 16;
+  constant ADC_FULL_SCALE_VAL: std_logic_vector(11 downto 0) := "100000000000";
   subtype ADC_RESOLUTION is std_logic_vector (ADC_BITS - 1 downto 0);
 
   -- Clock period for the serial interface
