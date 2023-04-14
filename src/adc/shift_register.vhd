@@ -17,13 +17,13 @@ begin
   -- Accepts a single bit input and shifts the existing
   -- bits in the register to the left.
   ---------------------------------------------------------
-	process (CLK, RESET)
+	process (CLK, RESET, SPI_BUSY)
 	begin
 		if RESET = '1' then
 			bits <= (others => '0');
 		elsif rising_edge(CLK) then
 			if SPI_BUSY = '0' then
-				bits <= bits(bits'left - 1 downto 0) & SR_IN;
+				bits <= bits(ADC_BITS - 2 downto 0) & SR_IN;
 			end if;
 		end if;
 	end process;

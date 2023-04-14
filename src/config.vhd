@@ -18,7 +18,6 @@ package config is
     ADC_STATE_READ_DATA
   );
 
-
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
   constant ADC_BITS : integer := 16;
@@ -30,7 +29,8 @@ package config is
   -- Timing constraints for ADC
   constant ADC_POWER_ON_WAIT_TIME : Time := 10 ms;
   constant ADC_RESET_TIME : Time := ADC_CLK_PERIOD * 10;
-  constant ADC_TCONV : Time := ADC_CLK_PERIOD * (ADC_BITS + 1); -- inc. NULL-bit
+  constant ADC_CONV_WAIT_TIME : Time := ADC_CLK_PERIOD * 2; -- Min 1 period
+  constant ADC_TCONV : Time := ADC_CLK_PERIOD * ADC_BITS;
 
   ---------------------------------------------------------
   -- LCD (ATM12864D)

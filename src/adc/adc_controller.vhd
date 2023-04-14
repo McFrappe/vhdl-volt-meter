@@ -50,29 +50,27 @@ begin
         ADC_BIT <= '0';
 
         -- Use Single-Ended mode with channel 0.
-        if current_time < ADC_CLK_PERIOD then
+        if current_time < ADC_CONV_WAIT_TIME then
           -- Wait before starting conversion
           SPI_SS <= '1';
           SPI_MOSI <= '0';
-        elsif current_time < (2 * ADC_CLK_PERIOD) then
+        elsif current_time < (ADC_CLK_PERIOD + ADC_CONV_WAIT_TIME) then
           -- Start bit
           SPI_SS <= '0';
           SPI_MOSI <= '1';
-        elsif current_time < (3 * ADC_CLK_PERIOD) then
+        elsif current_time < ((2 * ADC_CLK_PERIOD) + ADC_CONV_WAIT_TIME) then
           -- SGL/DIFF
           SPI_SS <= '0';
           SPI_MOSI <= '1';
-        elsif current_time < (4 * ADC_CLK_PERIOD) then
+        elsif current_time < ((3 * ADC_CLK_PERIOD) + ADC_CONV_WAIT_TIME) then
           -- ODD/SIGN
           SPI_SS <= '0';
           SPI_MOSI <= '0';
-        elsif current_time < (5 * ADC_CLK_PERIOD) then
+        elsif current_time < ((4 * ADC_CLK_PERIOD) + ADC_CONV_WAIT_TIME) then
           -- MS/BF
           SPI_SS <= '0';
           SPI_MOSI <= '1';
         else
-          -- TODO: Does a state change require a clock cycle to complete?
-          -- Will we start reading at the NULL-bit or at B11?
           SPI_SS <= '0';
           SPI_MOSI <= '0';
           next_state <= ADC_STATE_READ_DATA;
