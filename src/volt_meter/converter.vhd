@@ -82,10 +82,7 @@ begin
         end if;
 
       when CONVERTER_STATE_SHOW_VOLTAGE =>
-        LCD_ENABLE <= '0';
-        VOLTAGE <= (others => '0');
-
-        if LCD_BUSY = '0' then
+        if LCD_BUSY = '0' and bit_index < 15 then
           LCD_ENABLE <= '1';
 
           -- TODO: Convert to list of integers
@@ -95,9 +92,12 @@ begin
             VOLTAGE <= "100110001";
           end if;
 
-          if bit_index < 15 then
-            bit_index := bit_index + 1;
-          else
+          bit_index := bit_index + 1;
+        else
+          LCD_ENABLE <= '0';
+          VOLTAGE <= (others => '0');
+
+          if current_time >= 4000 ms then
             next_state <= CONVERTER_STATE_WAIT;
           end if;
         end if;
