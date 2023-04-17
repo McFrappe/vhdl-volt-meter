@@ -21,23 +21,7 @@ refer to the applicable agreement for further details.
 (header "graphic" (version "1.4"))
 (pin
 	(input)
-	(rect 0 272 176 288)
-	(text "INPUT" (rect 133 0 161 10)(font "Arial" (font_size 6)))
-	(text "ADC_BITS[15..0]" (rect 5 0 82 17)(font "Intel Clear" ))
-	(pt 176 8)
-	(drawing
-		(line (pt 92 12)(pt 117 12))
-		(line (pt 92 4)(pt 117 4))
-		(line (pt 121 8)(pt 176 8))
-		(line (pt 92 12)(pt 92 4))
-		(line (pt 117 4)(pt 121 8))
-		(line (pt 117 12)(pt 121 8))
-	)
-	(text "GND" (rect 136 7 157 17)(font "Arial" (font_size 6)))
-)
-(pin
-	(input)
-	(rect 8 240 176 256)
+	(rect 448 208 616 224)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
 	(text "CLK" (rect 5 0 26 12)(font "Arial" ))
 	(pt 168 8)
@@ -54,7 +38,7 @@ refer to the applicable agreement for further details.
 )
 (pin
 	(input)
-	(rect 456 224 624 240)
+	(rect 448 224 616 240)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
 	(text "RESET" (rect 5 0 35 17)(font "Intel Clear" ))
 	(pt 168 8)
@@ -68,6 +52,39 @@ refer to the applicable agreement for further details.
 	)
 	(text "GND" (rect 128 7 149 17)(font "Arial" (font_size 6)))
 	(annotation_block (location)(rect 456 184 528 208))
+)
+(pin
+	(input)
+	(rect 448 240 616 256)
+	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
+	(text "ENABLE" (rect 5 0 43 17)(font "Intel Clear" ))
+	(pt 168 8)
+	(drawing
+		(line (pt 84 12)(pt 109 12))
+		(line (pt 84 4)(pt 109 4))
+		(line (pt 113 8)(pt 168 8))
+		(line (pt 84 12)(pt 84 4))
+		(line (pt 109 4)(pt 113 8))
+		(line (pt 109 12)(pt 113 8))
+	)
+	(text "GND" (rect 128 7 149 17)(font "Arial" (font_size 6)))
+	(annotation_block (location)(rect 536 120 608 144))
+)
+(pin
+	(input)
+	(rect 448 256 616 272)
+	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
+	(text "DATA[9..0]" (rect 5 0 56 17)(font "Intel Clear" ))
+	(pt 168 8)
+	(drawing
+		(line (pt 84 12)(pt 109 12))
+		(line (pt 84 4)(pt 109 4))
+		(line (pt 113 8)(pt 168 8))
+		(line (pt 84 12)(pt 84 4))
+		(line (pt 109 4)(pt 113 8))
+		(line (pt 109 12)(pt 113 8))
+	)
+	(text "GND" (rect 128 7 149 17)(font "Arial" (font_size 6)))
 )
 (pin
 	(output)
@@ -171,48 +188,22 @@ refer to the applicable agreement for further details.
 	)
 	(annotation_block (location)(rect 1048 264 1112 288))
 )
-(symbol
-	(rect 200 216 440 328)
-	(text "lcd_converter" (rect 5 0 72 12)(font "Arial" ))
-	(text "inst1" (rect 8 96 30 113)(font "Intel Clear" ))
-	(port
-		(pt 0 32)
-		(input)
-		(text "CLK" (rect 0 0 21 12)(font "Arial" ))
-		(text "CLK" (rect 21 27 42 39)(font "Arial" ))
-		(line (pt 0 32)(pt 16 32))
-	)
-	(port
-		(pt 0 48)
-		(input)
-		(text "LCD_BUSY" (rect 0 0 59 12)(font "Arial" ))
-		(text "LCD_BUSY" (rect 21 43 80 55)(font "Arial" ))
-		(line (pt 0 48)(pt 16 48))
-	)
-	(port
-		(pt 0 64)
-		(input)
-		(text "ADC_BITS[15..0]" (rect 0 0 84 12)(font "Arial" ))
-		(text "ADC_BITS[15..0]" (rect 21 59 105 71)(font "Arial" ))
-		(line (pt 0 64)(pt 16 64)(line_width 3))
-	)
-	(port
-		(pt 240 32)
-		(output)
-		(text "ENABLE" (rect 0 0 42 12)(font "Arial" ))
-		(text "ENABLE" (rect 184 27 226 39)(font "Arial" ))
-		(line (pt 240 32)(pt 224 32))
-	)
-	(port
-		(pt 240 48)
-		(output)
-		(text "VOLTAGE[9..0]" (rect 0 0 75 12)(font "Arial" ))
-		(text "VOLTAGE[9..0]" (rect 156 43 231 55)(font "Arial" ))
-		(line (pt 240 48)(pt 224 48)(line_width 3))
-	)
+(pin
+	(output)
+	(rect 872 304 1048 320)
+	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
+	(text "LCD_BUSY" (rect 90 0 143 17)(font "Intel Clear" ))
+	(pt 0 8)
 	(drawing
-		(rectangle (rect 16 16 224 96))
+		(line (pt 0 8)(pt 52 8))
+		(line (pt 52 4)(pt 78 4))
+		(line (pt 52 12)(pt 78 12))
+		(line (pt 52 12)(pt 52 4))
+		(line (pt 78 4)(pt 82 8))
+		(line (pt 82 8)(pt 78 12))
+		(line (pt 78 12)(pt 82 8))
 	)
+	(annotation_block (location)(rect 1040 344 1104 368))
 )
 (symbol
 	(rect 632 184 848 360)
@@ -300,52 +291,6 @@ refer to the applicable agreement for further details.
 	)
 )
 (connector
-	(pt 456 200)
-	(pt 456 216)
-)
-(connector
-	(pt 456 216)
-	(pt 632 216)
-)
-(connector
-	(pt 440 248)
-	(pt 632 248)
-)
-(connector
-	(pt 440 264)
-	(pt 632 264)
-	(bus)
-)
-(connector
-	(pt 632 232)
-	(pt 624 232)
-)
-(connector
-	(pt 184 264)
-	(pt 200 264)
-)
-(connector
-	(pt 176 280)
-	(pt 200 280)
-	(bus)
-)
-(connector
-	(pt 184 248)
-	(pt 184 200)
-)
-(connector
-	(pt 456 200)
-	(pt 184 200)
-)
-(connector
-	(pt 176 248)
-	(pt 184 248)
-)
-(connector
-	(pt 184 248)
-	(pt 200 248)
-)
-(connector
 	(pt 848 216)
 	(pt 872 216)
 )
@@ -356,22 +301,6 @@ refer to the applicable agreement for further details.
 (connector
 	(pt 848 232)
 	(pt 872 232)
-)
-(connector
-	(pt 184 264)
-	(pt 184 376)
-)
-(connector
-	(pt 184 376)
-	(pt 864 376)
-)
-(connector
-	(pt 864 312)
-	(pt 864 376)
-)
-(connector
-	(pt 864 312)
-	(pt 848 312)
 )
 (connector
 	(pt 848 296)
@@ -386,4 +315,24 @@ refer to the applicable agreement for further details.
 	(pt 872 264)
 	(pt 848 264)
 )
-(junction (pt 184 248))
+(connector
+	(pt 632 264)
+	(pt 616 264)
+	(bus)
+)
+(connector
+	(pt 616 232)
+	(pt 632 232)
+)
+(connector
+	(pt 616 248)
+	(pt 632 248)
+)
+(connector
+	(pt 848 312)
+	(pt 872 312)
+)
+(connector
+	(pt 616 216)
+	(pt 632 216)
+)

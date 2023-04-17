@@ -18,25 +18,25 @@ architecture rtl of converter is
   signal latched_voltage : ADC_RESOLUTION;
 
   -- TODO: probably doesnt work, loook over calculation (binary long division)
-  function to_volt (adc_reading : in ADC_RESOLUTION) return integer is
-    variable quotient : ADC_RESOLUTION := (others => '0');
-    variable remainder : std_logic_vector(ADC_FULL_SCALE_VAL'length - 1 downto 0) := ADC_FULL_SCALE_VAL;
-  begin
-    -- store adc_reading/fullscaledata
-    -- fullscaledata==2^12 = 4096
-    quotient := (others => '0');
-    remainder := (others => '0');
-    for i in 0 to adc_reading'length - ADC_FULL_SCALE_VAL'length loop
-        if remainder(remainder'length - 1 downto 0) >= ADC_FULL_SCALE_VAL then
-            quotient(i) := '1';
-            remainder := remainder - ADC_FULL_SCALE_VAL;
-        end if;
-        remainder := '0' & remainder(remainder'length - 1 downto 0);
-    end loop;
+  -- function to_volt (adc_reading : in ADC_RESOLUTION) return integer is
+  --   variable quotient : ADC_RESOLUTION := (others => '0');
+  --   variable remainder : std_logic_vector(ADC_FULL_SCALE_VAL'length - 1 downto 0) := ADC_FULL_SCALE_VAL;
+  -- begin
+  --   -- store adc_reading/fullscaledata
+  --   -- fullscaledata==2^12 = 4096
+  --   quotient := (others => '0');
+  --   remainder := (others => '0');
+  --   for i in 0 to adc_reading'length - ADC_FULL_SCALE_VAL'length loop
+  --       if remainder(remainder'length - 1 downto 0) >= ADC_FULL_SCALE_VAL then
+  --           quotient(i) := '1';
+  --           remainder := remainder - ADC_FULL_SCALE_VAL;
+  --       end if;
+  --       remainder := '0' & remainder(remainder'length - 1 downto 0);
+  --   end loop;
 
-    -- vref == 5v
-    return conv_integer(quotient) * 5;
-  end to_volt;
+  --   -- vref == 5v
+  --   return conv_integer(quotient) * 5;
+  -- end to_volt;
 
 begin
   ---------------------------------------------------------
@@ -77,7 +77,7 @@ begin
         if LCD_BUSY = '0' then
           LCD_ENABLE <= '1';
           -- TODO: ADC controller does not support this
-          VOLTAGE <= "0000000001";
+          VOLTAGE <= "000000001";
           next_state <= CONVERTER_STATE_SHOW_VOLTAGE;
         end if;
 

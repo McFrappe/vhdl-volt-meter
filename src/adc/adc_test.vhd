@@ -14,7 +14,7 @@
 
 -- PROGRAM		"Quartus Prime"
 -- VERSION		"Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition"
--- CREATED		"Fri Apr 14 16:53:58 2023"
+-- CREATED		"Mon Apr 17 11:00:47 2023"
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all; 
@@ -30,6 +30,7 @@ ENTITY adc_test IS
 		SPI_MOSI :  OUT  STD_LOGIC;
 		SPI_SS :  OUT  STD_LOGIC;
 		SPI_CLK :  OUT  STD_LOGIC;
+		SPI_BUSY :  OUT  STD_LOGIC;
 		VOLTAGE :  OUT  STD_LOGIC_VECTOR(15 DOWNTO 0)
 	);
 END adc_test;
@@ -70,6 +71,7 @@ SIGNAL	SYNTHESIZED_WIRE_3 :  STD_LOGIC;
 
 
 BEGIN 
+SPI_BUSY <= SYNTHESIZED_WIRE_3;
 
 
 

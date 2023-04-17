@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY volt_meter
+set_global_assignment -name TOP_LEVEL_ENTITY "volt-meter"
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:39:51  MARCH 31, 2023"
 set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
@@ -54,6 +54,8 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name VHDL_FILE ../lcd/lcd_test.vhd
+set_global_assignment -name VHDL_FILE ../adc/adc_test.vhd
 set_global_assignment -name VHDL_FILE ../config.vhd
 set_global_assignment -name VHDL_FILE ../adc/shift_register.vhd
 set_global_assignment -name VHDL_FILE ../adc/adc_controller.vhd
@@ -61,4 +63,23 @@ set_global_assignment -name VHDL_FILE ../adc/adc_clk_divider.vhd
 set_global_assignment -name VHDL_FILE ../lcd/lcd_controller.vhd
 set_global_assignment -name VHDL_FILE converter.vhd
 set_global_assignment -name BDF_FILE "volt-meter.bdf"
+set_location_assignment PIN_AF14 -to CLK
+set_location_assignment PIN_AJ19 -to LCD_BL
+set_location_assignment PIN_AD20 -to LCD_BUS[7]
+set_location_assignment PIN_AK21 -to LCD_BUS[6]
+set_location_assignment PIN_AJ20 -to LCD_BUS[5]
+set_location_assignment PIN_AC20 -to LCD_BUS[4]
+set_location_assignment PIN_AA19 -to LCD_BUS[3]
+set_location_assignment PIN_AG17 -to LCD_BUS[2]
+set_location_assignment PIN_AE16 -to LCD_BUS[1]
+set_location_assignment PIN_AH17 -to LCD_BUS[0]
+set_location_assignment PIN_Y18 -to LCD_ENABLE
+set_location_assignment PIN_AK18 -to LCD_ON
+set_location_assignment PIN_Y17 -to LCD_RS
+set_location_assignment PIN_AK16 -to LCD_RW
+set_location_assignment PIN_AB12 -to RESET
+set_location_assignment PIN_AG26 -to SPI_CLK
+set_location_assignment PIN_AH27 -to SPI_MISO
+set_location_assignment PIN_AK29 -to SPI_MOSI
+set_location_assignment PIN_AF26 -to SPI_SS
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
