@@ -17,27 +17,16 @@ architecture rtl of converter is
   signal current_time : Time := 0 ns;
   signal latched_voltage : ADC_RESOLUTION;
 
-  -- TODO: probably doesnt work, loook over calculation (binary long division)
-  -- function to_volt (adc_reading : in ADC_RESOLUTION) return integer is
-  --   variable quotient : ADC_RESOLUTION := (others => '0');
-  --   variable remainder : std_logic_vector(ADC_FULL_SCALE_VAL'length - 1 downto 0) := ADC_FULL_SCALE_VAL;
-  -- begin
-  --   -- store adc_reading/fullscaledata
-  --   -- fullscaledata==2^12 = 4096
-  --   quotient := (others => '0');
-  --   remainder := (others => '0');
-  --   for i in 0 to adc_reading'length - ADC_FULL_SCALE_VAL'length loop
-  --       if remainder(remainder'length - 1 downto 0) >= ADC_FULL_SCALE_VAL then
-  --           quotient(i) := '1';
-  --           remainder := remainder - ADC_FULL_SCALE_VAL;
-  --       end if;
-  --       remainder := '0' & remainder(remainder'length - 1 downto 0);
-  --   end loop;
-
-  --   -- vref == 5v
-  --   return conv_integer(quotient) * 5;
-  -- end to_volt;
-
+  function to_volt (adc_reading : in ADC_RESOLUTION) return ufixed is
+      variable left : ufixed (3 downto 0);
+      variable decimals : ufixed (0 downto -3);
+      variable result : ufixed (3 downto -3);
+  begin
+    left := to_ufixed(shift_right((unsigned(adc_reading) * 4) + unsigned(adc_reading), 12));
+    decimals := to_ufixed(unsigned(adc_reading) / 4096);
+    result := left + decimals;
+    return result;
+  end to_volt;
 begin
   ---------------------------------------------------------
   -- Converts raw ADC readings into LCD characters that
