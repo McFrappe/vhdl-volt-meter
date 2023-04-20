@@ -205,6 +205,7 @@ begin
 
       when LCD_STATE_WRITE =>
         LCD_BUSY <= '1';
+		  -- TODO: Read data in READY instead?
         LCD_RS <= DATA(DATA'left);
         LCD_BUS <= DATA((DATA'left - 1) downto 0);
 

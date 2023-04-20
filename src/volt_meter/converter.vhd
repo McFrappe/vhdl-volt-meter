@@ -95,7 +95,7 @@ begin
           bit_index := bit_index + 1;
         else
           LCD_ENABLE <= '0';
-          VOLTAGE <= (others => '0');
+          --VOLTAGE <= (others => '0');
 
           if current_time >= 4000 ms then
             next_state <= CONVERTER_STATE_WAIT;
@@ -113,7 +113,7 @@ begin
       if next_state /= current_state then
           current_time <= 0 ns;
       else
-        current_time <= current_time + ADC_CLK_PERIOD;
+        current_time <= current_time + CLK_PERIOD;
       end if;
       current_state <= next_state;
     end if;
