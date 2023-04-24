@@ -16,28 +16,6 @@ architecture rtl of converter is
   signal current_state, next_state : CONVERTER_STATE;
   signal current_time : Time := 0 ns;
   signal latched_voltage : ADC_RESOLUTION;
-
-  -- TODO: probably doesnt work, loook over calculation (binary long division)
-  -- function to_volt (adc_reading : in ADC_RESOLUTION) return integer is
-  --   variable quotient : ADC_RESOLUTION := (others => '0');
-  --   variable remainder : std_logic_vector(ADC_FULL_SCALE_VAL'length - 1 downto 0) := ADC_FULL_SCALE_VAL;
-  -- begin
-  --   -- store adc_reading/fullscaledata
-  --   -- fullscaledata==2^12 = 4096
-  --   quotient := (others => '0');
-  --   remainder := (others => '0');
-  --   for i in 0 to adc_reading'length - ADC_FULL_SCALE_VAL'length loop
-  --       if remainder(remainder'length - 1 downto 0) >= ADC_FULL_SCALE_VAL then
-  --           quotient(i) := '1';
-  --           remainder := remainder - ADC_FULL_SCALE_VAL;
-  --       end if;
-  --       remainder := '0' & remainder(remainder'length - 1 downto 0);
-  --   end loop;
-
-  --   -- vref == 5v
-  --   return conv_integer(quotient) * 5;
-  -- end to_volt;
-
 begin
   ---------------------------------------------------------
   -- Converts raw ADC readings into LCD characters that
@@ -60,6 +38,7 @@ begin
         end if;
 
       when CONVERTER_STATE_READ =>
+        bit_index := 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
@@ -67,25 +46,25 @@ begin
         if SPI_BUSY = '1' then
           -- Latch the current ADC value and display it
           latched_voltage <= ADC_BITS;
-          next_state <= CONVERTER_STATE_CLEAR_SCREEN;
+          next_state <= CONVERTER_STATE_SHOW_VOLTAGE;
         end if;
 
+      -- TODO: Something is fishy with this state
       when CONVERTER_STATE_CLEAR_SCREEN =>
+        bit_index := 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
         if LCD_BUSY = '0' then
           LCD_ENABLE <= '1';
-          -- TODO: ADC controller does not support this
           VOLTAGE <= "000000001";
           next_state <= CONVERTER_STATE_SHOW_VOLTAGE;
         end if;
 
       when CONVERTER_STATE_SHOW_VOLTAGE =>
-        if LCD_BUSY = '0' and bit_index < 15 then
+        if LCD_BUSY = '0' then
           LCD_ENABLE <= '1';
 
-          -- TODO: Convert to list of integers
           if latched_voltage(bit_index) = '0' then
             VOLTAGE <= "100110000";
           else
@@ -95,11 +74,11 @@ begin
           bit_index := bit_index + 1;
         else
           LCD_ENABLE <= '0';
-          --VOLTAGE <= (others => '0');
+          VOLTAGE <= (others => '0');
+        end if;
 
-          if current_time >= 4000 ms then
-            next_state <= CONVERTER_STATE_WAIT;
-          end if;
+        if bit_index > 16 then
+          next_state <= CONVERTER_STATE_WAIT;
         end if;
     end case;
   end process;
@@ -111,7 +90,7 @@ begin
       current_state <= CONVERTER_STATE_WAIT;
     elsif CLK'event and rising_edge(CLK) then
       if next_state /= current_state then
-          current_time <= 0 ns;
+        current_time <= 0 ns;
       else
         current_time <= current_time + CLK_PERIOD;
       end if;

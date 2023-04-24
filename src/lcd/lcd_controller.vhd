@@ -196,19 +196,16 @@ begin
       when LCD_STATE_READY =>
         LCD_RS <= '0';
         LCD_BUS <= (others => '0');
+        LCD_BUSY <= '0';
+
         if ENABLE = '1' then
-          LCD_BUSY <= '1';
+          LCD_RS <= DATA(DATA'left);
+          LCD_BUS <= DATA((DATA'left - 1) downto 0);
           next_state <= LCD_STATE_WRITE;
-        else
-          LCD_BUSY <= '0';
         end if;
 
       when LCD_STATE_WRITE =>
         LCD_BUSY <= '1';
-		  -- TODO: Read data in READY instead?
-        LCD_RS <= DATA(DATA'left);
-        LCD_BUS <= DATA((DATA'left - 1) downto 0);
-
         if current_time < LCD_RESET_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_ENABLE <= '0';
