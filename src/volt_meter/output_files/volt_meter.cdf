@@ -6,7 +6,7 @@ JedecChain;
 	P ActionCode(Ign)
 		Device PartName(SOCVHPS) MfrSpec(OpMask(0));
 	P ActionCode(Cfg)
-		Device PartName(5CSEMA5F31) Path("C:/Users/fredrik/Documents/vhdl-volt-meter/src/volt_meter/output_files/") File("volt_meter.sof") MfrSpec(OpMask(1));
+		Device PartName(5CSEMA5F31) Path("X:/Documents/GitHub/vhdl-volt-meter/src/volt_meter/output_files/") File("volt_meter.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

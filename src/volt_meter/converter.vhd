@@ -16,19 +16,19 @@ architecture rtl of converter is
   signal current_state, next_state : CONVERTER_STATE;
   signal current_time : Time := 0 ns;
   signal latched_voltage : ADC_RESOLUTION;
+  signal bit_index : integer range 0 to 16 := 0;
 begin
   ---------------------------------------------------------
   -- Converts raw ADC readings into LCD characters that
   -- will be displayed on the LCD screen.
   ---------------------------------------------------------
   process (current_time, current_state, SPI_BUSY, LCD_BUSY, ADC_BITS) is
-    variable bit_index : integer := 0;
   begin
     next_state <= current_state;
 
     case current_state is
       when CONVERTER_STATE_WAIT =>
-        bit_index := 0;
+        bit_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
@@ -38,7 +38,7 @@ begin
         end if;
 
       when CONVERTER_STATE_READ =>
-        bit_index := 0;
+        bit_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
@@ -51,7 +51,7 @@ begin
 
       -- TODO: Something is fishy with this state
       when CONVERTER_STATE_CLEAR_SCREEN =>
-        bit_index := 0;
+        bit_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
@@ -71,13 +71,16 @@ begin
             VOLTAGE <= "100110001";
           end if;
 
-          bit_index := bit_index + 1;
+			 if bit_index < 16 then
+				bit_index <= bit_index + 1;
+			 end if;
         else
           LCD_ENABLE <= '0';
           VOLTAGE <= (others => '0');
         end if;
 
-        if bit_index > 16 then
+        if bit_index = 16 then
+			 bit_index <= 0;
           next_state <= CONVERTER_STATE_WAIT;
         end if;
     end case;
