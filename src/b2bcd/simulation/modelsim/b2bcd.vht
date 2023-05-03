@@ -46,7 +46,7 @@ ARCHITECTURE b2bcd_arch OF b2bcd_vhd_tst IS
       BCD1 : OUT BCD_DECIMAL_RESOLUTION;
       BCD2 : OUT BCD_DECIMAL_RESOLUTION;
       BCD3 : OUT BCD_DECIMAL_RESOLUTION;
-      BINARY : IN BCD_BINARY_RESOLUTION;
+      BINARY_IN : IN BCD_BINARY_RESOLUTION;
       CLK : IN STD_LOGIC;
       RST : IN STD_LOGIC
     );
@@ -58,7 +58,7 @@ BEGIN
     BCD1 => BCD1,
     BCD2 => BCD2,
     BCD3 => BCD3,
-    BINARY => BINARY,
+    BINARY_IN => BINARY,
     CLK => CLK,
     RST => RST
   );
@@ -74,27 +74,20 @@ BEGIN
   test : PROCESS
   BEGIN
     RST <= '1';
-    BINARY <= "0110111101100"; -- 3564
     WAIT FOR CLK_PERIOD;
     RST <= '0'; -- start conversion
-    WAIT FOR (CLK_PERIOD * BCD_BINARY_BITS) * 2;
 
-    RST <= '1';
+    BINARY <= "0110111101100"; -- 3564
+    WAIT FOR 1 us;
+
     BINARY <= "0000001100100"; -- 100
-    WAIT FOR CLK_PERIOD;
-    RST <= '0';
-    WAIT FOR (CLK_PERIOD * BCD_BINARY_BITS) * 2;
+    WAIT FOR 1 us;
 
-    RST <= '1';
     BINARY <= "0000001000000"; -- 64
-    WAIT FOR CLK_PERIOD;
-    RST <= '0';
-    WAIT FOR (CLK_PERIOD * BCD_BINARY_BITS) * 2;
+    WAIT FOR 1 us;
 
-    RST <= '1';
     BINARY <= "0000000000011"; -- 3
-    WAIT FOR CLK_PERIOD;
-    RST <= '0';
-    WAIT FOR (CLK_PERIOD * BCD_BINARY_BITS) * 2;
+    WAIT FOR 1 us;
+  WAIT;
   END PROCESS test;
 END b2bcd_arch;
