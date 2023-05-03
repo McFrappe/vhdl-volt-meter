@@ -107,11 +107,17 @@ package config is
   ---------------------------------------------------------
   -- Binary to BCD converter
   ---------------------------------------------------------
+  type BCD_STATE is (
+    BCD_STATE_START,
+    BCD_STATE_SHIFT,
+    BCD_STATE_DONE
+  );
+
   constant BCD_BINARY_BITS : integer := 13; -- Maximum value is 5000
   constant BCD_DECIMAL_BITS : integer := 4; -- 0 to 9
   constant BCD_SCRATCH_BITS : integer := 29; -- N + 4*ceil(N/3)
 
-  subtype BCD_BINARY_RESOLUTION is std_logic_vector (BCD_BINARY_BITS-1 downto 0); -- TODO: HOw many bits?
-  subtype BCD_DECIMAL_RESOLUTION is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0); -- 0 to 9
+  subtype BCD_BINARY_BUFFER is std_logic_vector (BCD_BINARY_BITS-1 downto 0);
+  subtype BCD_DECIMAL_BUFFER is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0);
   subtype BCD_SCRATCH_BUFFER is unsigned (BCD_SCRATCH_BITS-1 downto 0);
 end package config;
