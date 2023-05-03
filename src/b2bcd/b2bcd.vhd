@@ -68,8 +68,8 @@ begin
   bcds_reg (3 downto 0) <= bcds(3 downto 0) + 3 when bcds(3 downto 0) > 4
                           else bcds(3 downto 0);
 
-  BCD3 <= bcds (15 downto 12) when state = BCD_STATE_DONE else "UUUU";
-  BCD2 <= bcds (11 downto 8) when state = BCD_STATE_DONE else "UUUU";
-  BCD1 <= bcds (7 downto 4) when state = BCD_STATE_DONE else "UUUU";
-  BCD0 <= bcds (3 downto 0) when state = BCD_STATE_DONE else "UUUU";
+  BCD3 <= bcds (15 downto 12);
+  BCD2 <= bcds (11 downto 8);
+  BCD1 <= bcds (7 downto 4);
+  BCD0 <= bcds (3 downto 0);
 end rtl;
