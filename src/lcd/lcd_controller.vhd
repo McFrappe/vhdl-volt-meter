@@ -216,6 +216,7 @@ begin
           end if;
         else
           LCD_BUS <= (others => '0');
+          LCD_BUSY <= '0';
           next_state <= LCD_STATE_READY;
         end if;
     end case;

@@ -14,20 +14,20 @@
 
 -- PROGRAM		"Quartus Prime"
 -- VERSION		"Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition"
--- CREATED		"Mon Apr 17 11:08:16 2023"
+-- CREATED		"Wed May 03 09:55:05 2023"
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all; 
 
 LIBRARY work;
 
-ENTITY lcd_test IS 
+ENTITY lcd_full IS 
 	PORT
 	(
 		CLK :  IN  STD_LOGIC;
 		RESET :  IN  STD_LOGIC;
 		ENABLE :  IN  STD_LOGIC;
-		DATA :  IN  STD_LOGIC_VECTOR(8 DOWNTO 0);
+		DATA :  IN  STD_LOGIC_VECTOR(9 DOWNTO 0);
 		LCD_RS :  OUT  STD_LOGIC;
 		LCD_RW :  OUT  STD_LOGIC;
 		LCD_ENABLE :  OUT  STD_LOGIC;
@@ -36,15 +36,15 @@ ENTITY lcd_test IS
 		LCD_BUSY :  OUT  STD_LOGIC;
 		LCD_BUS :  OUT  STD_LOGIC_VECTOR(7 DOWNTO 0)
 	);
-END lcd_test;
+END lcd_full;
 
-ARCHITECTURE bdf_type OF lcd_test IS 
+ARCHITECTURE bdf_type OF lcd_full IS 
 
 COMPONENT lcd_controller
 	PORT(CLK : IN STD_LOGIC;
 		 RESET : IN STD_LOGIC;
 		 ENABLE : IN STD_LOGIC;
-		 DATA : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+		 DATA : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
 		 LCD_RS : OUT STD_LOGIC;
 		 LCD_RW : OUT STD_LOGIC;
 		 LCD_ENABLE : OUT STD_LOGIC;

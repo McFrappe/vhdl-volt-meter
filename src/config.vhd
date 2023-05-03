@@ -1,4 +1,5 @@
 library ieee;
+use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 
 package config is
@@ -30,8 +31,7 @@ package config is
 
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
-  constant ADC_BITS : integer := 16;
-  constant ADC_FULL_SCALE_VAL: std_logic_vector(11 downto 0) := "100000000000";
+  constant ADC_BITS : integer := 12;
   subtype ADC_RESOLUTION is std_logic_vector (ADC_BITS - 1 downto 0);
 
   -- Clock period for the serial interface
@@ -76,7 +76,7 @@ package config is
   -- Clock frequency of the LCD display controller.
   -- This is used to ensure that we fulfill with the timing
   -- constraints defined below.
-  constant LCD_CLK_PERIOD : Time := (CLK_PERIOD * 1); -- FIXME: clock divider
+  constant LCD_CLK_PERIOD : Time := CLK_PERIOD;
 
   -- Timing constraints of the LCD display.
   -- In order for the display to be able to fully execute
@@ -103,4 +103,15 @@ package config is
   constant LCD_DISP_CLEAR_CMD     : LCD_DATA_BUS := "00000001";
   constant LCD_ENTRY_MODE_SET_CMD : LCD_DATA_BUS := "00000110";
   constant LCD_DISP_ON_CMD        : LCD_DATA_BUS := "00001100";
+
+  ---------------------------------------------------------
+  -- Binary to BCD converter
+  ---------------------------------------------------------
+  constant BCD_BINARY_BITS : integer := 13; -- Maximum value is 5000
+  constant BCD_DECIMAL_BITS : integer := 4; -- 0 to 9
+  constant BCD_SCRATCH_BITS : integer := 29; -- N + 4*ceil(N/3)
+
+  subtype BCD_BINARY_RESOLUTION is std_logic_vector (BCD_BINARY_BITS-1 downto 0); -- TODO: HOw many bits?
+  subtype BCD_DECIMAL_RESOLUTION is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0); -- 0 to 9
+  subtype BCD_SCRATCH_BUFFER is unsigned (BCD_SCRATCH_BITS-1 downto 0);
 end package config;

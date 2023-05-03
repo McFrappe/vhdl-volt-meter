@@ -20,7 +20,7 @@ refer to the applicable agreement for further details.
 */
 (header "symbol" (version "1.2"))
 (symbol
-	(rect 64 64 304 208)
+	(rect 64 64 320 208)
 	(text "converter" (rect 5 0 52 12)(font "Arial" ))
 	(text "inst" (rect 8 128 25 140)(font "Arial" ))
 	(port
@@ -54,25 +54,25 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 0 80)
 		(input)
-		(text "ADC_BITS[15..0]" (rect 0 0 84 12)(font "Arial" ))
-		(text "ADC_BITS[15..0]" (rect 21 75 105 87)(font "Arial" ))
+		(text "ADC_VALUE[11..0]" (rect 0 0 96 12)(font "Arial" ))
+		(text "ADC_VALUE[11..0]" (rect 21 75 117 87)(font "Arial" ))
 		(line (pt 0 80)(pt 16 80)(line_width 3))
 	)
 	(port
-		(pt 240 32)
+		(pt 256 32)
 		(output)
 		(text "LCD_ENABLE" (rect 0 0 70 12)(font "Arial" ))
-		(text "LCD_ENABLE" (rect 160 27 230 39)(font "Arial" ))
-		(line (pt 240 32)(pt 224 32))
+		(text "LCD_ENABLE" (rect 176 27 235 39)(font "Arial" ))
+		(line (pt 256 32)(pt 240 32))
 	)
 	(port
-		(pt 240 48)
+		(pt 256 48)
 		(output)
 		(text "VOLTAGE[8..0]" (rect 0 0 75 12)(font "Arial" ))
-		(text "VOLTAGE[8..0]" (rect 156 43 231 55)(font "Arial" ))
-		(line (pt 240 48)(pt 224 48)(line_width 3))
+		(text "VOLTAGE[8..0]" (rect 172 43 235 55)(font "Arial" ))
+		(line (pt 256 48)(pt 240 48)(line_width 3))
 	)
 	(drawing
-		(rectangle (rect 16 16 224 128))
+		(rectangle (rect 16 16 240 128))
 	)
 )

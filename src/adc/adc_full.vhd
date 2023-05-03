@@ -14,14 +14,14 @@
 
 -- PROGRAM		"Quartus Prime"
 -- VERSION		"Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition"
--- CREATED		"Mon Apr 17 11:00:47 2023"
+-- CREATED		"Wed May 03 09:46:20 2023"
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all; 
 
 LIBRARY work;
 
-ENTITY adc_test IS 
+ENTITY adc_full IS 
 	PORT
 	(
 		SPI_MISO :  IN  STD_LOGIC;
@@ -31,11 +31,11 @@ ENTITY adc_test IS
 		SPI_SS :  OUT  STD_LOGIC;
 		SPI_CLK :  OUT  STD_LOGIC;
 		SPI_BUSY :  OUT  STD_LOGIC;
-		VOLTAGE :  OUT  STD_LOGIC_VECTOR(15 DOWNTO 0)
+		VOLTAGE :  OUT  STD_LOGIC_VECTOR(11 DOWNTO 0)
 	);
-END adc_test;
+END adc_full;
 
-ARCHITECTURE bdf_type OF adc_test IS 
+ARCHITECTURE bdf_type OF adc_full IS 
 
 COMPONENT adc_clk_divider
 	PORT(CLK : IN STD_LOGIC;
@@ -61,7 +61,7 @@ COMPONENT shift_register
 		 RESET : IN STD_LOGIC;
 		 SR_IN : IN STD_LOGIC;
 		 SPI_BUSY : IN STD_LOGIC;
-		 SR_OUT : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+		 SR_OUT : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
 	);
 END COMPONENT;
 
@@ -92,7 +92,7 @@ PORT MAP(CLK => SYNTHESIZED_WIRE_4,
 		 ADC_BIT => SYNTHESIZED_WIRE_2);
 
 
-b2v_inst7 : shift_register
+b2v_inst2 : shift_register
 PORT MAP(CLK => SYNTHESIZED_WIRE_4,
 		 RESET => RESET,
 		 SR_IN => SYNTHESIZED_WIRE_2,

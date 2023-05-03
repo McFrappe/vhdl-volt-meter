@@ -34,7 +34,7 @@ refer to the applicable agreement for further details.
 		(line (pt 109 12)(pt 113 8))
 	)
 	(text "VCC" (rect 128 7 148 17)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect 8 216 72 240))
+	(annotation_block (location)(rect 384 200 448 224))
 )
 (pin
 	(input)
@@ -51,7 +51,7 @@ refer to the applicable agreement for further details.
 		(line (pt 109 12)(pt 113 8))
 	)
 	(text "GND" (rect 128 7 149 17)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect 456 184 528 208))
+	(annotation_block (location)(rect 376 224 448 248))
 )
 (pin
 	(input)
@@ -74,7 +74,7 @@ refer to the applicable agreement for further details.
 	(input)
 	(rect 448 256 616 272)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "DATA[9..0]" (rect 5 0 56 17)(font "Intel Clear" ))
+	(text "DATA[9..0]" (rect 5 0 55 17)(font "Intel Clear" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))

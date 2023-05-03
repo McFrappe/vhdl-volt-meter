@@ -54,8 +54,8 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 208 32)
 		(output)
-		(text "SR_OUT[15..0]" (rect 0 0 63 12)(font "Arial" ))
-		(text "SR_OUT[15..0]" (rect 124 27 187 39)(font "Arial" ))
+		(text "SR_OUT[11..0]" (rect 0 0 62 12)(font "Arial" ))
+		(text "SR_OUT[11..0]" (rect 125 27 187 39)(font "Arial" ))
 		(line (pt 208 32)(pt 192 32)(line_width 3))
 	)
 	(drawing
