@@ -107,8 +107,7 @@ package config is
   ---------------------------------------------------------
   -- ADC to decimal converter
   ---------------------------------------------------------
-  subtype CONVERTER_IN_BUFFER is std_logic_vector (24 downto 0);
-  subtype CONVERTER_OUT_BUFFER is std_logic_vector (31 downto 0);
+  subtype CONVERTER_BUFFER is std_logic_vector (31 downto 0);
 
   ---------------------------------------------------------
   -- Binary to BCD converter
