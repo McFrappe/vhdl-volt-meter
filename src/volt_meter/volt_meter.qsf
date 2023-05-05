@@ -155,8 +155,6 @@ set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -t
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_global_assignment -name SEARCH_PATH ../adc
-set_global_assignment -name SEARCH_PATH ../lcd
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "adc_full:inst|SPI_BUSY" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "adc_full:inst|adc_controller:b2v_inst1|current_state.ADC_STATE_POWER_ON" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "adc_full:inst|adc_controller:b2v_inst1|current_state.ADC_STATE_READ_DATA" -section_id auto_signaltap_0
@@ -246,6 +244,13 @@ set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_global_assignment -name SLD_FILE "db/volt-meter_auto_stripped.stp"
+set_global_assignment -name SEARCH_PATH ../converter
+set_global_assignment -name SEARCH_PATH ../b2bcd
+set_global_assignment -name SEARCH_PATH ../adc
+set_global_assignment -name SEARCH_PATH ../lcd
+set_global_assignment -name VHDL_FILE ../converter/simple_converter.vhd
+set_global_assignment -name VHDL_FILE ../b2bcd/b2bcd.vhd
 set_global_assignment -name SIGNALTAP_FILE "output_files/volt-meter.stp"
 set_global_assignment -name VHDL_FILE ../adc/shift_register.vhd
 set_global_assignment -name VHDL_FILE ../adc/adc_full.vhd
@@ -257,4 +262,3 @@ set_global_assignment -name VHDL_FILE ../config.vhd
 set_global_assignment -name VHDL_FILE converter.vhd
 set_global_assignment -name BDF_FILE "volt-meter.bdf"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_global_assignment -name SLD_FILE "db/volt-meter_auto_stripped.stp"
