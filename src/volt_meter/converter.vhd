@@ -6,7 +6,7 @@ use ieee.std_logic_1164.all;
 entity converter is
   port (
     CLK, RESET, SPI_BUSY, LCD_BUSY : in std_logic;
-    ADC_VALUE : in ADC_RESOLUTION;
+    DECIMALS : in BCD_DECIMAL_BUFFER;
     LCD_ENABLE : out std_logic;
     VOLTAGE : out LCD_DATA_BUFFER
   );
