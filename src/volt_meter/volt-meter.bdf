@@ -412,43 +412,6 @@ refer to the applicable agreement for further details.
 	(fill (color 16 16 16))
 )
 (symbol
-	(rect 960 -64 1184 48)
-	(text "adc_converter" (rect 5 0 75 12)(font "Arial" ))
-	(text "inst14" (rect 8 96 36 113)(font "Intel Clear" ))
-	(port
-		(pt 0 32)
-		(input)
-		(text "CLK" (rect 0 0 21 12)(font "Arial" ))
-		(text "CLK" (rect 21 27 42 39)(font "Arial" ))
-		(line (pt 0 32)(pt 16 32))
-	)
-	(port
-		(pt 0 48)
-		(input)
-		(text "RESET" (rect 0 0 35 12)(font "Arial" ))
-		(text "RESET" (rect 21 43 56 55)(font "Arial" ))
-		(line (pt 0 48)(pt 16 48))
-	)
-	(port
-		(pt 0 64)
-		(input)
-		(text "VALUE[31..0]" (rect 0 0 67 12)(font "Arial" ))
-		(text "VALUE[31..0]" (rect 21 59 88 71)(font "Arial" ))
-		(line (pt 0 64)(pt 16 64)(line_width 3))
-	)
-	(port
-		(pt 224 32)
-		(output)
-		(text "RESULT[31..0]" (rect 0 0 74 12)(font "Arial" ))
-		(text "RESULT[31..0]" (rect 141 27 215 39)(font "Arial" ))
-		(line (pt 224 32)(pt 208 32)(line_width 3))
-	)
-	(drawing
-		(rectangle (rect 16 16 208 96)(color 85 255 127))
-	)
-	(fill (color 16 16 16))
-)
-(symbol
 	(rect 960 192 1200 320)
 	(text "encoder_full" (rect 5 0 75 13)(font "Lato" (font_size 8)))
 	(text "inst" (rect 8 113 24 124)(font "Lato" (bold)))
@@ -503,6 +466,42 @@ refer to the applicable agreement for further details.
 	)
 	(drawing
 		(rectangle (rect 16 16 224 112))
+	)
+)
+(symbol
+	(rect 960 -64 1184 48)
+	(text "adc_converter" (rect 5 0 75 12)(font "Arial" ))
+	(text "inst1" (rect 8 96 30 107)(font "Lato" (bold)))
+	(port
+		(pt 0 32)
+		(input)
+		(text "CLK" (rect 0 0 21 12)(font "Arial" ))
+		(text "CLK" (rect 21 27 42 39)(font "Arial" ))
+		(line (pt 0 32)(pt 16 32))
+	)
+	(port
+		(pt 0 48)
+		(input)
+		(text "RESET" (rect 0 0 35 12)(font "Arial" ))
+		(text "RESET" (rect 21 43 56 55)(font "Arial" ))
+		(line (pt 0 48)(pt 16 48))
+	)
+	(port
+		(pt 0 64)
+		(input)
+		(text "VALUE[11..0]" (rect 0 0 67 12)(font "Arial" ))
+		(text "VALUE[11..0]" (rect 21 59 88 71)(font "Arial" ))
+		(line (pt 0 64)(pt 16 64)(line_width 3))
+	)
+	(port
+		(pt 224 32)
+		(output)
+		(text "RESULT[31..0]" (rect 0 0 74 12)(font "Arial" ))
+		(text "RESULT[31..0]" (rect 141 27 215 39)(font "Arial" ))
+		(line (pt 224 32)(pt 208 32)(line_width 3))
+	)
+	(drawing
+		(rectangle (rect 16 16 208 96))
 	)
 )
 (connector
@@ -791,7 +790,7 @@ refer to the applicable agreement for further details.
 (junction (pt 912 160))
 (title_block
 	(rect 512 240 880 360)
-	(section (rect 0 96 240 120)(text "DATE" (rect 2 0 30 12)(font "Arial" ))(text "Sat May 06 12:28:40 2023" (rect 56 3 236 19)(font "Arial" (font_size 10)))(date)(border))
+	(section (rect 0 96 240 120)(text "DATE" (rect 2 0 30 12)(font "Arial" ))(text "Sat May 06 14:48:10 2023" (rect 56 3 236 19)(font "Arial" (font_size 10)))(date)(border))
 	(section (rect 0 48 368 72)(text "DESIGNER" (rect 2 0 59 12)(font "Arial" ))(text "F. ENGSTRAND & F. JAMIL" (rect 56 2 308 20)(font "Arial" (font_size 12)))(border))
 	(section (rect 0 24 368 48)(text "INSTITUTION" (rect 2 0 70 12)(font "Arial" ))(text "UPPSALA UNIVERSITY" (rect 56 2 275 20)(font "Arial" (font_size 12)))(border))
 	(section (rect 310 96 368 120)(text "OF" (rect 10 0 25 12)(font "Arial" ))(text "1" (rect 34 4 42 20)(font "Arial" (font_size 10))))

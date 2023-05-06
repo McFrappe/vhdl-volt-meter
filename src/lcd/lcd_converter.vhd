@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 entity lcd_converter is
   port (
     CLK, LCD_BUSY : in std_logic;
-    ADC_BITS : in ADC_RESOLUTION;
+    ADC_BITS : in ADC_BUFFER;
     ENABLE : out std_logic;
     VOLTAGE : out LCD_DATA_BUFFER
   );

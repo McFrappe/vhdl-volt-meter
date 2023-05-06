@@ -22,7 +22,7 @@ package config is
   -- Internal ADC resolution is only 12 bits, but it will
   -- be stored in a 16-bit shift register.
   constant ADC_BITS : integer := 12;
-  subtype ADC_RESOLUTION is std_logic_vector (ADC_BITS - 1 downto 0);
+  subtype ADC_BUFFER is std_logic_vector (ADC_BITS - 1 downto 0);
 
   -- Clock period for the serial interface
   constant ADC_CLK_PERIOD : Time := CLK_PERIOD * 50;
