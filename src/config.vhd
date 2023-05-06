@@ -10,17 +10,6 @@ package config is
   constant CLK_PERIOD : Time := 20 ns;
 
   ---------------------------------------------------------
-  -- Converter
-  ---------------------------------------------------------
-  type CONVERTER_STATE is (
-    CONVERTER_STATE_WAIT_CONV_START,
-    CONVERTER_STATE_WAIT_CONV_END,
-    CONVERTER_STATE_READ,
-    CONVERTER_STATE_CLEAR_SCREEN,
-    CONVERTER_STATE_SHOW_VOLTAGE
-  );
-
-  ---------------------------------------------------------
   -- ADC (MCP3202)
   ---------------------------------------------------------
   type ADC_STATE is (
@@ -106,9 +95,23 @@ package config is
   constant LCD_DISP_ON_CMD        : LCD_DATA_BUS := "00001100";
 
   ---------------------------------------------------------
+  -- Encoder
+  ---------------------------------------------------------
+  type ENCODER_STATE is (
+    ENCODER_STATE_WAIT_CONV_START,
+    ENCODER_STATE_WAIT_CONV_END,
+    ENCODER_STATE_READ,
+    ENCODER_STATE_CLEAR_SCREEN,
+    ENCODER_STATE_SHOW_VOLTAGE,
+    ENCODER_STATE_SHOW_DECIMAL
+  );
+
+  constant ENCODER_CLK_PERIOD : Time := LCD_CLK_PERIOD * 2;
+
+  ---------------------------------------------------------
   -- ADC to decimal converter
   ---------------------------------------------------------
-  subtype CONVERTER_BUFFER is std_logic_vector (31 downto 0);
+  subtype ADC_CONVERTER_BUFFER is std_logic_vector (31 downto 0);
 
   ---------------------------------------------------------
   -- Binary to BCD converter
@@ -123,7 +126,7 @@ package config is
   constant BCD_DECIMAL_BITS : integer := 16; -- 0 to 9
 
   subtype BCD_BINARY_BUFFER is std_logic_vector (BCD_BINARY_BITS-1 downto 0);
-  subtype BCD_DECIMAL_BUFFER is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0);
+  subtype BCD_DECIMALS_BUFFER is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0);
 
   constant BCD_CONV_TIME : Time := CLK_PERIOD * 16; -- TODO: might need to be smaller
 end package config;

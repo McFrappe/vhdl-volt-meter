@@ -6,15 +6,15 @@ use ieee.std_logic_unsigned.all;
 entity b2bcd is
   port(
     CLK, RESET: in std_logic;
-    BINARY_IN: in CONVERTER_BUFFER;
-    DECIMALS: out BCD_DECIMAL_BUFFER
+    BINARY_IN: in ADC_CONVERTER_BUFFER;
+    DECIMALS: out BCD_DECIMALS_BUFFER
   );
 end b2bcd;
 
 architecture rtl of b2bcd is
   signal state, state_next : BCD_STATE;
   signal binary, binary_next : BCD_BINARY_BUFFER;
-  signal bcds, bcds_reg, bcds_next : BCD_DECIMAL_BUFFER;
+  signal bcds, bcds_reg, bcds_next : BCD_DECIMALS_BUFFER;
   signal shift_counter, shift_counter_next : natural range 0 to BCD_BINARY_BITS;
 begin
   process (CLK, RESET)

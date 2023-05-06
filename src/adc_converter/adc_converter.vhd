@@ -6,13 +6,13 @@ use ieee.numeric_std.all;
 entity adc_converter is
   port(
     CLK, RESET: in std_logic;
-    VALUE : in CONVERTER_BUFFER;
-    RESULT : out CONVERTER_BUFFER
+    VALUE : in ADC_CONVERTER_BUFFER;
+    RESULT : out ADC_CONVERTER_BUFFER
   );
 end adc_converter;
 
 architecture rtl of adc_converter is
-  signal res : unsigned (CONVERTER_BUFFER'left downto 0) := (others => '0');
+  signal res : unsigned (ADC_CONVERTER_BUFFER'left downto 0) := (others => '0');
 begin
   process (CLK, RESET)
   begin
