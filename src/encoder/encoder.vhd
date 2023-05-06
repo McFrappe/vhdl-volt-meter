@@ -45,13 +45,12 @@ begin
   -- will be displayed on the LCD screen. The encoding follow the font table of
   -- LCD 'jhd162a'.
   ---------------------------------------------------------
-  process (current_time, current_state, SPI_BUSY, LCD_BUSY, DECIMALS) is
+  process (current_time, current_state, decimal_index, SPI_BUSY, LCD_BUSY, DECIMALS) is
   begin
     next_state <= current_state;
 
     case current_state is
       when ENCODER_STATE_WAIT_CONV_START =>
-        decimal_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
         latched_decimals <= (others => '0');
@@ -62,7 +61,6 @@ begin
         end if;
 
       when ENCODER_STATE_WAIT_CONV_END =>
-        decimal_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
         latched_decimals <= (others => '0');
@@ -73,12 +71,11 @@ begin
         end if;
 
       when ENCODER_STATE_READ =>
-        decimal_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
         latched_decimals <= (others => '0');
 
-        if current_time > BCD_CONV_TIME and current_time <= BCD_CONV_TIME + ENCODER_CLK_PERIOD then
+        if current_time <= BCD_CONV_TIME + ENCODER_CLK_PERIOD then
           -- Latch the current voltage and display it
           latched_decimals <= DECIMALS;
         elsif LCD_BUSY = '0' then
@@ -86,7 +83,6 @@ begin
         end if;
 
       when ENCODER_STATE_CLEAR_SCREEN =>
-        decimal_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
@@ -105,10 +101,8 @@ begin
         VOLTAGE <= (others => '0');
 
         if decimal_index >= 4 then
-			    decimal_index <= 0;
           next_state <= ENCODER_STATE_WAIT_CONV_START;
         elsif LCD_BUSY = '0' then
-				  decimal_index <= decimal_index + 1;
           next_state <= ENCODER_STATE_SHOW_DECIMAL;
         end if;
 
@@ -119,10 +113,10 @@ begin
         if current_time < ENCODER_CLK_PERIOD then
           LCD_ENABLE <= '1';
           case decimal_index is
-            when 1 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left downto latched_decimals'left-3));
-            when 2 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-4 downto latched_decimals'left-7));
-            when 3 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-8 downto latched_decimals'left-11));
-            when 4 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-12 downto latched_decimals'left-15));
+            when 0 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left downto latched_decimals'left-3));
+            when 1 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-4 downto latched_decimals'left-7));
+            when 2 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-8 downto latched_decimals'left-11));
+            when 3 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-12 downto latched_decimals'left-15));
             when others => LCD_ENABLE <= '0';
           end case;
         elsif current_time < ENCODER_CLK_PERIOD * 2 then
@@ -145,6 +139,13 @@ begin
       else
         current_time <= current_time + ENCODER_CLK_PERIOD;
       end if;
+
+      if current_state = ENCODER_STATE_SHOW_DECIMAL and next_state = ENCODER_STATE_SHOW_VOLTAGE then
+        decimal_index <= decimal_index + 1;
+      elsif current_state /= ENCODER_STATE_SHOW_VOLTAGE and current_state /= ENCODER_STATE_SHOW_DECIMAL then
+        decimal_index <= 0;
+      end if;
+
       current_state <= next_state;
     end if;
   end process;
