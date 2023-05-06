@@ -73,9 +73,8 @@ begin
       when ENCODER_STATE_READ =>
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
-        latched_decimals <= (others => '0');
 
-        if current_time <= BCD_CONV_TIME + ENCODER_CLK_PERIOD then
+        if current_time < BCD_CONV_TIME then
           -- Latch the current voltage and display it
           latched_decimals <= DECIMALS;
         elsif LCD_BUSY = '0' then

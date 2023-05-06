@@ -60,6 +60,8 @@ BEGIN
     WAIT FOR BCD_CONV_TIME;
 	  SPI_BUSY <= '0';
     DECIMALS <= x"3564";
+    WAIT FOR ENCODER_CLK_PERIOD;
+    DECIMALS <= x"FFFF";
 
     -- Wait until encoder attempts to clear LCD
     WAIT UNTIL LCD_ENABLE = '1';
