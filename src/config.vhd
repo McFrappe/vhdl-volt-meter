@@ -13,7 +13,8 @@ package config is
   -- Converter
   ---------------------------------------------------------
   type CONVERTER_STATE is (
-    CONVERTER_STATE_WAIT,
+    CONVERTER_STATE_WAIT_CONV_START,
+    CONVERTER_STATE_WAIT_CONV_END,
     CONVERTER_STATE_READ,
     CONVERTER_STATE_CLEAR_SCREEN,
     CONVERTER_STATE_SHOW_VOLTAGE
@@ -40,7 +41,7 @@ package config is
   -- Timing constraints for ADC
   constant ADC_POWER_ON_WAIT_TIME : Time := 10 ms;
   constant ADC_RESET_TIME : Time := ADC_CLK_PERIOD * 10;
-  constant ADC_CONV_WAIT_TIME : Time := ADC_CLK_PERIOD * 2; -- Min 1 period
+  constant ADC_CONV_WAIT_TIME : Time := ADC_CLK_PERIOD * 16; -- Min 1 period
   constant ADC_TCONV : Time := ADC_CLK_PERIOD * ADC_BITS;
 
   ---------------------------------------------------------
@@ -123,4 +124,6 @@ package config is
 
   subtype BCD_BINARY_BUFFER is std_logic_vector (BCD_BINARY_BITS-1 downto 0);
   subtype BCD_DECIMAL_BUFFER is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0);
+
+  constant BCD_CONV_TIME : Time := CLK_PERIOD * 16; -- TODO: might need to be smaller
 end package config;

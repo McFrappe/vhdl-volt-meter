@@ -49,13 +49,23 @@ begin
     next_state <= current_state;
 
     case current_state is
-      when CONVERTER_STATE_WAIT =>
+      when CONVERTER_STATE_WAIT_CONV_START =>
         decimal_index <= 0;
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
         -- Wait for the ADC controller to start reading
         if SPI_BUSY = '0' then
+          next_state <= CONVERTER_STATE_WAIT_CONV_END;
+        end if;
+
+      when CONVERTER_STATE_WAIT_CONV_END =>
+        decimal_index <= 0;
+        LCD_ENABLE <= '0';
+        VOLTAGE <= (others => '0');
+
+        -- Wait for the ADC controller to finish reading
+        if SPI_BUSY = '1' then
           next_state <= CONVERTER_STATE_READ;
         end if;
 
@@ -64,10 +74,8 @@ begin
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
-        -- TODO: Adjust based on b2bcd timing
-        -- Wait for the ADC controller to finish reading
-        if SPI_BUSY = '1' then
-          -- Latch the current ADC value and display it
+        if current_time >= BCD_CONV_TIME then
+          -- Latch the current voltage and display it
           latched_decimals <= DECIMALS;
           next_state <= CONVERTER_STATE_CLEAR_SCREEN;
         end if;
@@ -101,7 +109,7 @@ begin
 
         if decimal_index = 4 then
 			    decimal_index <= 0;
-          next_state <= CONVERTER_STATE_WAIT;
+          next_state <= CONVERTER_STATE_WAIT_CONV_START;
         end if;
     end case;
   end process;
@@ -110,12 +118,12 @@ begin
   process (CLK, RESET) is
   begin
     if RESET = '1' then
-      current_state <= CONVERTER_STATE_WAIT;
+      current_state <= CONVERTER_STATE_WAIT_CONV_START;
     elsif CLK'event and rising_edge(CLK) then
       if next_state /= current_state then
         current_time <= 0 ns;
       else
-        current_time <= current_time + LCD_CLK_PERIOD;
+        current_time <= current_time + (LCD_CLK_PERIOD * 2);
       end if;
       current_state <= next_state;
     end if;
