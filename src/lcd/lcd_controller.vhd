@@ -15,6 +15,7 @@ end entity;
 architecture rtl of lcd_controller is
   signal current_state, next_state : LCD_STATE;
   signal current_time : Time := 0 ns;
+  signal latched_data : LCD_DATA_BUFFER := (others => '0');
 begin
   ---------------------------------------------------------
   -- Accepts an instruction to execute, or data to write to
@@ -29,6 +30,7 @@ begin
     case current_state is
       when LCD_STATE_POWER_ON =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         -- Wait for quite a while in order to make sure that
         -- the LCD display has power, etc.
         if current_time < LCD_POWER_ON_WAIT_TIME then
@@ -42,6 +44,7 @@ begin
 
       when LCD_STATE_RESET =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_RESET_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -59,6 +62,7 @@ begin
 
       when LCD_STATE_RESET_2 =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_RESET_2_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -76,6 +80,7 @@ begin
 
       when LCD_STATE_RESET_3 =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_RESET_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -93,6 +98,7 @@ begin
 
       when LCD_STATE_FN_SET =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -110,6 +116,7 @@ begin
 
       when LCD_STATE_CONFIGURE =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -127,6 +134,7 @@ begin
 
       when LCD_STATE_DISP_SWITCH =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -144,6 +152,7 @@ begin
 
       when LCD_STATE_DISP_CLEAR =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_RESET_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -161,6 +170,7 @@ begin
 
       when LCD_STATE_ENTRY_MODE_SET =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -178,6 +188,7 @@ begin
 
       when LCD_STATE_DISP_ON =>
         LCD_BUSY <= '1';
+        latched_data <= (others => '0');
         if current_time < LCD_CMD_TIME + LCD_TC then
           if current_time < LCD_TSP1 then
             LCD_RS <= '0';
@@ -194,28 +205,51 @@ begin
         end if;
 
       when LCD_STATE_READY =>
-        LCD_RS <= '0';
-        LCD_BUS <= (others => '0');
         LCD_BUSY <= '0';
+        LCD_RS <= '0';
+        LCD_ENABLE <= '0';
+        LCD_BUS <= (others => '0');
+        latched_data <= (others => '0');
 
         if ENABLE = '1' then
-          LCD_RS <= DATA(DATA'left);
-          LCD_BUS <= DATA((DATA'left - 1) downto 0);
-          next_state <= LCD_STATE_WRITE;
+          latched_data <= DATA;
+          if DATA = "000000001" then
+            next_state <= LCD_STATE_WRITE_RESET;
+          else
+            next_state <= LCD_STATE_WRITE_CHAR;
+          end if;
         end if;
 
-      when LCD_STATE_WRITE =>
+      when LCD_STATE_WRITE_CHAR =>
         LCD_BUSY <= '1';
-        if current_time < LCD_RESET_TIME + LCD_TC then
-          if current_time < LCD_TSP1 then
-            LCD_ENABLE <= '0';
-          elsif current_time < LCD_TSP1 + LCD_TPW then
-            LCD_ENABLE <= '1';
-          else
-            LCD_ENABLE <= '0';
-          end if;
+        LCD_ENABLE <= '0';
+        LCD_RS <= latched_data(latched_data'left);
+        LCD_BUS <= latched_data((latched_data'left - 1) downto 0);
+
+        if current_time < LCD_TSP1 then
+          LCD_ENABLE <= '0';
+        elsif current_time < LCD_TSP1 + (LCD_CMD_TIME / 2) then
+          LCD_ENABLE <= '1';
+        elsif current_time < LCD_TSP1 + LCD_CMD_TIME then
+          LCD_ENABLE <= '0';
         else
-          LCD_BUS <= (others => '0');
+          LCD_BUSY <= '0';
+          next_state <= LCD_STATE_READY;
+        end if;
+
+      when LCD_STATE_WRITE_RESET =>
+        LCD_BUSY <= '1';
+        LCD_ENABLE <= '0';
+        LCD_RS <= latched_data(latched_data'left);
+        LCD_BUS <= latched_data((latched_data'left - 1) downto 0);
+
+        if current_time < LCD_TSP1 then
+          LCD_ENABLE <= '0';
+        elsif current_time < LCD_TSP1 + (LCD_RESET_TIME / 2) then
+          LCD_ENABLE <= '1';
+        elsif current_time < LCD_TSP1 + LCD_RESET_TIME then
+          LCD_ENABLE <= '0';
+        else
           LCD_BUSY <= '0';
           next_state <= LCD_STATE_READY;
         end if;

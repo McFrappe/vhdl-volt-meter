@@ -50,7 +50,8 @@ package config is
     LCD_STATE_ENTRY_MODE_SET,
     LCD_STATE_DISP_ON,
     LCD_STATE_READY,
-    LCD_STATE_WRITE
+    LCD_STATE_WRITE_CHAR,
+    LCD_STATE_WRITE_RESET
   );
 
   -- The bidirectional data bus used to read/write data

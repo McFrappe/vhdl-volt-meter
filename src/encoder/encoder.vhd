@@ -100,7 +100,9 @@ begin
         VOLTAGE <= (others => '0');
 
         if decimal_index >= 4 then
-          next_state <= ENCODER_STATE_WAIT_CONV_START;
+          if current_time >= 1000 ms then
+            next_state <= ENCODER_STATE_WAIT_CONV_START;
+          end if;
         elsif LCD_BUSY = '0' then
           next_state <= ENCODER_STATE_SHOW_DECIMAL;
         end if;
