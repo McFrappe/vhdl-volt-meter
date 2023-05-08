@@ -21,7 +21,7 @@ begin
 	begin
 		if RESET = '1' then
 			bits <= (others => '0');
-		elsif rising_edge(CLK) then
+		elsif falling_edge(CLK) then
 			if SPI_BUSY = '0' then
 				bits <= bits(ADC_BITS - 2 downto 0) & SR_IN;
 			end if;

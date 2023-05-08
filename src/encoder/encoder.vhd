@@ -74,7 +74,7 @@ begin
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
-        if current_time < BCD_CONV_TIME then
+        if current_time <= BCD_CONV_TIME then
           -- Latch the current voltage and display it
           latched_decimals <= DECIMALS;
         elsif LCD_BUSY = '0' then
@@ -88,7 +88,7 @@ begin
         if current_time < ENCODER_CLK_PERIOD then
           LCD_ENABLE <= '1';
           VOLTAGE <= "000000001";
-        elsif current_time < ENCODER_CLK_PERIOD * 2 then
+        elsif current_time < ENCODER_CLK_PERIOD * 3 then
           LCD_ENABLE <= '0';
           VOLTAGE <= (others => '0');
         else
@@ -100,7 +100,8 @@ begin
         VOLTAGE <= (others => '0');
 
         if decimal_index >= 4 then
-          if current_time >= 1000 ms then
+          -- We must limit the amount of times that we write to the LCD.
+          if current_time >= ENCODER_UPDATE_WAIT_TIME then
             next_state <= ENCODER_STATE_WAIT_CONV_START;
           end if;
         elsif LCD_BUSY = '0' then
@@ -120,7 +121,7 @@ begin
             when 3 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-12 downto latched_decimals'left-15));
             when others => LCD_ENABLE <= '0';
           end case;
-        elsif current_time < ENCODER_CLK_PERIOD * 2 then
+        elsif current_time < ENCODER_CLK_PERIOD * 3 then
           LCD_ENABLE <= '0';
           VOLTAGE <= (others => '0');
         else

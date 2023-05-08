@@ -109,6 +109,11 @@ package config is
 
   constant ENCODER_CLK_PERIOD : Time := LCD_CLK_PERIOD * 2;
 
+  -- A single reset of the display takes ~2ms, and writing a char
+  -- ~100us. This means a minimum wait time of around 3ms, but we
+  -- need to update significantly slower than this to make it readable.
+  constant ENCODER_UPDATE_WAIT_TIME : Time := 1000 ms;
+
   ---------------------------------------------------------
   -- ADC to decimal converter
   ---------------------------------------------------------
