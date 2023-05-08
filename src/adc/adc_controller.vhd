@@ -79,11 +79,11 @@ begin
       when ADC_STATE_READ_DATA =>
         SPI_MOSI <= '0'; -- Dont care
 
-        if current_time < ADC_CLK_PERIOD then
-          -- Skip NULL bit
-          SPI_SS <= '0';
-          SPI_BUSY <= '1';
-        elsif current_time < ADC_TCONV then
+        -- if current_time < ADC_CLK_PERIOD then
+        --   -- Skip NULL bit
+        --   SPI_SS <= '0';
+        --   SPI_BUSY <= '1';
+        if current_time <= ADC_TCONV then
           SPI_SS <= '0';
           SPI_BUSY <= '0';
           ADC_BIT <= SPI_MISO;
