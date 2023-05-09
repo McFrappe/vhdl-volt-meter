@@ -16,7 +16,7 @@ architecture rtl of encoder is
   signal current_state, next_state : ENCODER_STATE;
   signal current_time : Time := 0 ns;
   signal latched_decimals : BCD_DECIMALS_BUFFER;
-  signal decimal_index : integer range 0 to 4 := 0;
+  signal decimal_index : integer range 0 to 6 := 0;
 
   ---------------------------------------------------------
   -- Function to lookup what a specific decimal is
@@ -74,7 +74,7 @@ begin
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
-        if current_time <= BCD_CONV_TIME then
+        if current_time < BCD_CONV_TIME then
           -- Latch the current voltage and display it
           latched_decimals <= DECIMALS;
         elsif LCD_BUSY = '0' then
@@ -99,7 +99,7 @@ begin
         LCD_ENABLE <= '0';
         VOLTAGE <= (others => '0');
 
-        if decimal_index >= 4 then
+        if decimal_index >= 6 then
           -- We must limit the amount of times that we write to the LCD.
           if current_time >= ENCODER_UPDATE_WAIT_TIME then
             next_state <= ENCODER_STATE_WAIT_CONV_START;
@@ -116,9 +116,11 @@ begin
           LCD_ENABLE <= '1';
           case decimal_index is
             when 0 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left downto latched_decimals'left-3));
-            when 1 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-4 downto latched_decimals'left-7));
-            when 2 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-8 downto latched_decimals'left-11));
-            when 3 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-12 downto latched_decimals'left-15));
+            when 1 => VOLTAGE <= LCD_CHAR_COMMA;
+            when 2 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-4 downto latched_decimals'left-7));
+            when 3 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-8 downto latched_decimals'left-11));
+            when 4 => VOLTAGE <= font_lookup (latched_decimals (latched_decimals'left-12 downto latched_decimals'left-15));
+            when 5 => VOLTAGE <= LCD_CHAR_V;
             when others => LCD_ENABLE <= '0';
           end case;
         elsif current_time < ENCODER_CLK_PERIOD * 3 then

@@ -5,9 +5,9 @@ use ieee.std_logic_unsigned.all;
 
 entity b2bcd is
   port(
-    CLK, RESET: in std_logic;
-    BINARY_IN: in ADC_CONVERTER_BUFFER;
-    DECIMALS: out BCD_DECIMALS_BUFFER
+    CLK, RESET, SPI_BUSY : in std_logic;
+    BINARY_IN : in ADC_CONVERTER_BUFFER;
+    DECIMALS : out BCD_DECIMALS_BUFFER
   );
 end b2bcd;
 
@@ -33,7 +33,7 @@ begin
   end process;
 
   convert:
-  process(state, binary, BINARY_IN, bcds, bcds_reg, shift_counter)
+  process(state, binary, BINARY_IN, SPI_BUSY, bcds, bcds_reg, shift_counter)
   begin
     state_next <= state;
     bcds_next <= bcds;
@@ -42,10 +42,17 @@ begin
 
     case state is
       when BCD_STATE_START =>
-        state_next <= BCD_STATE_SHIFT;
         binary_next <= BINARY_IN (BCD_BINARY_BITS-1 downto 0);
         bcds_next <= (others => '0');
         shift_counter_next <= 0;
+
+        -- Wait for ADC conversion to be done
+        if SPI_BUSY = '1' then
+          -- TODO: We need to wait at least an additional cycle, since
+          --       the ADC value has not been converted into decimal yet.
+          state_next <= BCD_STATE_SHIFT;
+        end if;
+
       when BCD_STATE_SHIFT =>
         if shift_counter = BCD_BINARY_BITS then
           state_next <= BCD_STATE_DONE;
@@ -54,8 +61,12 @@ begin
           bcds_next <= bcds_reg (BCD_DECIMAL_BITS-2 downto 0) & binary (BCD_BINARY_BITS-1);
           shift_counter_next <= shift_counter + 1;
         end if;
+
       when BCD_STATE_DONE =>
-        state_next <= BCD_STATE_START;
+        -- Wait until next ADC conversion starts before continuing
+        if SPI_BUSY = '0' then
+          state_next <= BCD_STATE_START;
+        end if;
     end case;
   end process;
 

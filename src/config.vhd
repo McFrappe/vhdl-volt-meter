@@ -95,6 +95,9 @@ package config is
   constant LCD_ENTRY_MODE_SET_CMD : LCD_DATA_BUS := "00000110";
   constant LCD_DISP_ON_CMD        : LCD_DATA_BUS := "00001100";
 
+  constant LCD_CHAR_COMMA : LCD_DATA_BUFFER := "100101110";
+  constant LCD_CHAR_V : LCD_DATA_BUFFER := "101010110";
+
   ---------------------------------------------------------
   -- Encoder
   ---------------------------------------------------------
@@ -128,11 +131,11 @@ package config is
     BCD_STATE_DONE
   );
 
-  constant BCD_BINARY_BITS : integer := 13; -- Maximum value is 5000
+  constant BCD_BINARY_BITS : integer := 13; -- Maximum decimal value is 5000
   constant BCD_DECIMAL_BITS : integer := 16; -- 0 to 9
 
   subtype BCD_BINARY_BUFFER is std_logic_vector (BCD_BINARY_BITS-1 downto 0);
   subtype BCD_DECIMALS_BUFFER is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0);
 
-  constant BCD_CONV_TIME : Time := CLK_PERIOD * 16; -- TODO: might need to be smaller
+  constant BCD_CONV_TIME : Time := CLK_PERIOD * 16;
 end package config;
