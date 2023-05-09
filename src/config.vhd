@@ -30,7 +30,7 @@ package config is
   -- Timing constraints for ADC
   constant ADC_POWER_ON_WAIT_TIME : Time := 10 ms;
   constant ADC_RESET_TIME : Time := ADC_CLK_PERIOD * 10;
-  constant ADC_CONV_WAIT_TIME : Time := ADC_CLK_PERIOD * 16; -- Min 1 period
+  constant ADC_CONV_WAIT_TIME : Time := ADC_CLK_PERIOD * 4; -- Min 1 period
   constant ADC_TCONV : Time := ADC_CLK_PERIOD * ADC_BITS;
 
   ---------------------------------------------------------
