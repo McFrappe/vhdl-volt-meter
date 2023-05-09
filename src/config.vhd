@@ -137,5 +137,5 @@ package config is
   subtype BCD_BINARY_BUFFER is std_logic_vector (BCD_BINARY_BITS-1 downto 0);
   subtype BCD_DECIMALS_BUFFER is std_logic_vector (BCD_DECIMAL_BITS-1 downto 0);
 
-  constant BCD_CONV_TIME : Time := CLK_PERIOD * 16;
+  constant BCD_CONV_TIME : Time := CLK_PERIOD * 32;
 end package config;
