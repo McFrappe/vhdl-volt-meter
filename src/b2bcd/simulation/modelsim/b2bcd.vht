@@ -8,6 +8,7 @@ END b2bcd_vhd_tst;
 ARCHITECTURE b2bcd_arch OF b2bcd_vhd_tst IS
   SIGNAL DECIMALS : BCD_DECIMALS_BUFFER;
   SIGNAL BINARY : ADC_CONVERTER_BUFFER;
+  SIGNAL SPI_BUSY : STD_LOGIC;
   SIGNAL CLK : STD_LOGIC;
   SIGNAL RESET : STD_LOGIC;
 
@@ -15,6 +16,7 @@ ARCHITECTURE b2bcd_arch OF b2bcd_vhd_tst IS
     PORT (
       DECIMALS : OUT BCD_DECIMALS_BUFFER;
       BINARY_IN : IN ADC_CONVERTER_BUFFER;
+      SPI_BUSY : IN STD_LOGIC;
       CLK : IN STD_LOGIC;
       RESET : IN STD_LOGIC
     );
@@ -24,6 +26,7 @@ BEGIN
   PORT MAP (
     DECIMALS => DECIMALS,
     BINARY_IN => BINARY,
+    SPI_BUSY => SPI_BUSY,
     CLK => CLK,
     RESET => RESET
   );
@@ -38,21 +41,28 @@ BEGIN
 
   test : PROCESS
   BEGIN
+    -- ADC conversion is being done
+    SPI_BUSY <= '0';
+
     RESET <= '1';
     WAIT FOR CLK_PERIOD;
-    RESET <= '0'; -- start conversion
+    RESET <= '0';
+
+    -- Wait until ADC conversion is done
+    WAIT FOR CLK_PERIOD;
+    SPI_BUSY <= '1';
 
     BINARY <= x"00000DEC"; -- 3564
-    WAIT FOR 1 us;
+    WAIT FOR CLK_PERIOD * 14;
+
+    -- Start a new ADC conversion.
+    -- Normally, the time for a conversion is of course much longer.
+    SPI_BUSY <= '0';
+    WAIT FOR CLK_PERIOD * 2;
+    SPI_BUSY <= '1';
 
     BINARY <= x"00000064"; -- 100
-    WAIT FOR 1 us;
-
-    BINARY <= x"00000040"; -- 64
-    WAIT FOR 1 us;
-
-    BINARY <= x"00000003"; -- 3
-    WAIT FOR 1 us;
+    WAIT FOR CLK_PERIOD * 14;
   WAIT;
   END PROCESS test;
 END b2bcd_arch;
